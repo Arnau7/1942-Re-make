@@ -1,0 +1,4 @@
+P_idle: 54 x 18 / 2 sprites = 27 x 18 px
+P_right: 21 x 18
+P_left: 21 x 18
+P_roll: 510 x 27 / 15 sprites = 34 x 27 px
