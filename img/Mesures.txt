@@ -2,3 +2,15 @@ P_idle: 54 x 18 / 2 sprites = 27 x 18 px
 P_right: 21 x 18
 P_left: 21 x 18
 P_roll: 510 x 27 / 15 sprites = 34 x 27 px
+
+
+level1: 224 x 2048 px
+level2: 224 x 2048 px
+
+enemy_kill: 114 x 17 / 6 sprites = 19 x 17 px
+double_bullet: 11 x 10 px
+single_bullet: 2 x 10 px
+quad_bullet: 17 x 12 px
+enemy_bullets: 4 x 4 px
+
+pUp_X: 13 x 10 px
