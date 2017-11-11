@@ -1,8 +1,9 @@
 var shooter1942 = shooter1942 || {};
 
-shooter1942.playerPrefab = function(game) {
-    Phaser.Sprite.call(this, game, 400, 300, 'playerSprite');
-    
+shooter1942.playerPrefab = function(game,x,y) {
+    Phaser.Sprite.call(this, game,x,y, 'playerSprite');
+    this.anchor.setTo(.5);
+    this.scale.setTo(5);
     console.log('created player');
     //this.checkWorldBounds = true;
     //this.outOfBoundsKill = true;

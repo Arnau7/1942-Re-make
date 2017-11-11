@@ -2,6 +2,7 @@ var shooter1942 = shooter1942 || {};
 
 shooter1942.level1 = {
     init:function(){
+        this.game.physics.startSystem(Phaser.Physics.ARCADE);
         
     },
     
@@ -15,14 +16,19 @@ shooter1942.level1 = {
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         
-        this.game.physics.startSystem(Phaser.Physics.ARCADE);
+       
     },
     
     create:function(){
-        this.game.stage.backgroundColor = "BEF781";
+                                        //BEF781
+        this.game.stage.backgroundColor = "DDDDDD";
+      
         //Add the player
-        var player = new shooter1942.playerPrefab(this.game);
-        /*this.player = this.game.add.sprite(350,800,'playerSprite');
+       /* this.player = new shooter1942.playerPrefab(this.game, gameOptions.gameWidth/2,gameOptions.gameHeight/2);
+        
+        console.log(this.player.position.x, this.player.position.y);*/
+        //this.game.add.existing(this.player);
+        this.player = this.game.add.sprite(350,800,'playerSprite');
         this.player.anchor.setTo(.5);
         this.player.scale.setTo(5);
         this.player.speedX = gameOptions.playerSpeedX;
@@ -33,12 +39,12 @@ shooter1942.level1 = {
         this.player.animations.add('roll', [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14], 10, true);
         
         // Physics
-        this.game.physics.arcade.enable(this.player);*/
+        this.game.physics.arcade.enable(this.player);
     },
     
     update:function(){
         // Play idle animation
-        /*this.player.animations.play('idle');
+        this.player.animations.play('idle');
         
         // Player movement
         if (this.cursors.left.isDown) {
@@ -61,8 +67,8 @@ shooter1942.level1 = {
         // Player roll
         if (this.space.isDown) {
             this.player.animations.play('playerRoll');
-        }*/
-        
+        }
+    
         
     }
 };
