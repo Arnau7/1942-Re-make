@@ -3,8 +3,8 @@ var shooter1942 = shooter1942 || {};
 var gameOptions = {
     gameWidth:  640,
     gameHeight: 480,
-    playerSpeedX: 10,
-    playerSpeedY: 10,
+    playerSpeedX: 4,
+    playerSpeedY: 4,
 };
 
 shooter1942.game = new Phaser.Game(gameOptions.gameWidth, gameOptions.gameHeight, Phaser.AUTO,null,this,false,false);

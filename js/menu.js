@@ -18,10 +18,15 @@ shooter1942.menu = {
         this.button = this.game.add.button(this.game.world.centerX, this.game.world.centerY,'playButton', this.startGame, this);
         this.button.anchor.setTo(.5);
         this.button.scale.setTo(.1);
+        
+        //KEYS
+        this.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     },
     
     update:function(){
-        
+        if(this.space.isDown){
+             this.state.start('level1');
+        }
     },
     
     startGame:function(){
