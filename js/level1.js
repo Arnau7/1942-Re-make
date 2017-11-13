@@ -27,7 +27,7 @@ shooter1942.level1 = {
         this.game.stage.backgroundColor = "DDDDDD";
       
        //Add the player
-        this.player = new shooter1942.playerPrefab(this.game, gameOptions.gameWidth/2, gameOptions.gameHeight - 50, gameOptions.playerSpeed);
+        var player = new shooter1942.playerPrefab(this.game, gameOptions.gameWidth/2, gameOptions.gameHeight - 50, gameOptions.playerSpeed);
        /* this.player = new shooter1942.playerPrefab(this.game, gameOptions.gameWidth/2,gameOptions.gameHeight/2);
         
         console.log(this.player.position.x, this.player.position.y);*/
@@ -69,7 +69,7 @@ shooter1942.level1 = {
         this.livesText.stroke= 'black';
         //this.livesText.strokeThikckness = 2;
         */
-        //this.game.add.existing(this.player);
+        this.game.add.existing(player);
         //Enemies
         this.loadEnemy();
         this.enemy1Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 3, this.createEnemy, this);

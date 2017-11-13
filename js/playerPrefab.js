@@ -46,4 +46,6 @@ shooter1942.playerPrefab.prototype.update = function(){
         this.body.velocity.y /= this.aux;
         this.body.velocity.y *= this.speed;
     }
+    
+    gameOptions.playerPosY = this.body.position.y;
 };

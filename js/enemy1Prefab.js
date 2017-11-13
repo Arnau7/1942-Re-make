@@ -7,7 +7,7 @@ shooter1942.enemy1Prefab = function(game, x, y, dir){
     this.checkWorldBounds = true;
     this.outOfBoundsKill = true;
     this.direction = dir - 1;
-    this.velocity = 50;
+    this.velocity = 75;
     this.changeDir = 1;
 };
 
@@ -19,7 +19,7 @@ shooter1942.enemy1Prefab.prototype.update = function() {
     this.body.velocity.x = this.direction * this.velocity;
     this.body.velocity.y = this.changeDir * this.velocity;
     
-    if(this.changeDir == 1 && this.body.position.y > 200){
-        this.changeDir = -1; 
+    if(this.changeDir == 1 && this.body.position.y > gameOptions.playerPosY - 30){
+        this.changeDir = -1;
     }
 }
