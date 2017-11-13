@@ -3,7 +3,9 @@ var shooter1942 = shooter1942 || {};
 shooter1942.level1 = {
     init:function(){
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
-        
+        gameOptions.score = 0;
+        gameOptions.lives = 3;
+        gameOptions.rolls = 3;
     },
     
     preload:function(){
@@ -13,6 +15,12 @@ shooter1942.level1 = {
         this.load.spritesheet('enemy1', 'img/E_01_idle.png', 17, 16);
         this.load.image('rolls', 'img/pUp_extraLife.png');
         this.load.image('lives', 'img/P_left.png');
+        this.load.image('pUp_1', 'img/pUp_enemyCrash.png');
+        this.load.image('pUp_2', 'img/pUp_extraLife.png');
+        this.load.image('pUp_3', 'img/pUp_loop.png');
+        this.load.image('pUp_4', 'img/pUp_points.png');
+        
+        this.load.image('bg1', 'img/level1.png');
         
         // Map cursor keys and Spacebar
         this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -28,6 +36,13 @@ shooter1942.level1 = {
       
        //Add the player
         var player = new shooter1942.playerPrefab(this.game, gameOptions.gameWidth/2, gameOptions.gameHeight - 50, gameOptions.playerSpeed);
+        
+        
+        this.fons = this.game.add.tileSprite(0, 0, gameOptions.gameWidth, 2048, 'bg1');
+        this.fons.scale.setTo(1.5);
+        this.fons.anchor.y = 1;
+        this.fons.anchor.y = 0;
+        
        /* this.player = new shooter1942.playerPrefab(this.game, gameOptions.gameWidth/2,gameOptions.gameHeight/2);
         
         console.log(this.player.position.x, this.player.position.y);*/
@@ -69,11 +84,12 @@ shooter1942.level1 = {
         this.livesText.stroke= 'black';
         //this.livesText.strokeThikckness = 2;
         */
-        this.game.add.existing(player);
         //Enemies
         this.loadEnemy();
-        this.enemy1Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 3, this.createEnemy, this);
+        //this.enemy1Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 3, this.createEnemy, this);
         
+        this.loadpUp();
+        this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 5, this.createpUp, this);
         // Physics
         //this.game.physics.arcade.enable(this.player);
     },
@@ -83,7 +99,6 @@ shooter1942.level1 = {
         if(this.escape.isDown){
             this.state.start('menu');
         }
-        
         /*
         // Play idle animation
         this.player.animations.play('idle');
@@ -131,11 +146,26 @@ shooter1942.level1 = {
     createEnemy:function(){
         var enemy = this.enemies.getFirstExists(false);
         if (!enemy) {
-            enemy = new shooter1942.enemy1Prefab(this.game, Math.random() * gameOptions.gameWidth, 0, Math.trunc(Math.random() * 2.999));
+            enemy = new shooter1942.enemy1Prefab(this.game, Math.random() * gameOptions.gameWidth, 1, Math.trunc(Math.random() * 2.999));
             this.enemies.add(enemy);
         }
         else{
-            enemy.reset(Math.random() * gameOptions.gameWidth, 0);
+            enemy.reset(Math.random() * gameOptions.gameWidth, 1);
+        }
+    },
+    
+    loadpUp:function(){
+        this.pups = this.add.group();
+        this.pups.enableBody = true;
+    },
+    createpUp:function(){
+        var pup = this.pups.getFirstExists(false);
+        if (!pup) {
+            pup = new shooter1942.power_up(this.game, Math.random() * gameOptions.gameWidth, 1, Math.trunc(Math.random() * 2.999) + 1, this.player);
+            this.pups.add(pup);
+        }
+        else{
+            pup.reset(Math.random() * gameOptions.gameWidth, 1);
         }
     }
 };

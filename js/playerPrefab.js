@@ -5,13 +5,13 @@ shooter1942.playerPrefab = function(game, x, y, speed) {
     this.anchor.setTo(.5);
     this.scale.setTo(2);
     this.game.physics.arcade.enable(this);
-    this.game.add.existing(this);
-    console.log('created player');
+    this.body.collideWorldBounds = true;
     this.checkWorldBounds = true;
     //this.outOfBoundsKill = true;
     this.animations.add('idle', [0, 1], 10, true);
     this.speed = speed;
     
+    this.game.add.existing(this);
     this.cursors = this.game.input.keyboard.createCursorKeys();
 };
 // Crear el prefab de la bala
@@ -48,4 +48,8 @@ shooter1942.playerPrefab.prototype.update = function(){
     }
     
     gameOptions.playerPosY = this.body.position.y;
+
+    //Debug elements
+    this.game.debug.body(this);
+    this.game.debug.text(this.speed, this.body.position.x, this.body.position.y);
 };
