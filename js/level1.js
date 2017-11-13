@@ -31,17 +31,14 @@ shooter1942.level1 = {
     },
     
     create:function(){
-                                        //BEF781
-        this.game.stage.backgroundColor = "DDDDDD";
-      
+        // Crear un objecte fons, per poder canviar-li les variables i pintar-ho
+        this.fons = this.game.add.tileSprite(0, 0, gameOptions.gameWidth, 2048, 'bg1');
+        this.fons.scale.y = 1.5; // S'escala a 1'5 perque l'sprite és petit. 
+        this.fons.scale.x = 1.5; // Està calculat que en X, si s'escala en 1'5 dona un numero exacte, que es el width de la finestra
+        this.fons.anchor.y = 0.84; // Aquest anchor en Y situa el punt d'anclatgef de l'imatge al punt exacte d'abaix, per poder correr cap adalt
+        
        //Add the player
         var player = new shooter1942.playerPrefab(this.game, gameOptions.gameWidth/2, gameOptions.gameHeight - 50, gameOptions.playerSpeed);
-        
-        
-        this.fons = this.game.add.tileSprite(0, 0, gameOptions.gameWidth, 2048, 'bg1');
-        this.fons.scale.setTo(1.5);
-        this.fons.anchor.y = 1;
-        this.fons.anchor.y = 0;
         
        /* this.player = new shooter1942.playerPrefab(this.game, gameOptions.gameWidth/2,gameOptions.gameHeight/2);
         
@@ -88,8 +85,8 @@ shooter1942.level1 = {
         this.loadEnemy();
         //this.enemy1Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 3, this.createEnemy, this);
         
-        this.loadpUp();
-        this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 5, this.createpUp, this);
+        //this.loadpUp();
+        //this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 5, this.createpUp, this);
         // Physics
         //this.game.physics.arcade.enable(this.player);
     },
@@ -99,6 +96,19 @@ shooter1942.level1 = {
         if(this.escape.isDown){
             this.state.start('menu');
         }
+        
+        // Fer correr el fons, velocitat a GameOptions per tenir-ho generalitzat als 3 nivells
+        this.fons.position.y += gameOptions.backgroundSpeed;
+        
+        // Si la posició del punt anclatge es mes gran a la mida del tile + finestra, atura d'avançar (final de nivell)
+        if (this.fons.position.y >= 2048 + gameOptions.gameHeight) {
+            gameOptions.backgroundSpeed = 0;
+        }
+        
+        // Simple debug per anar coneixent la posició del fons, alomillor mes endevant podem fer un upgrade
+        // i fer una barra de progrés (Ho deix com a proposta) de que te queda de nivell
+        this.game.debug.text('Posició Y del fons: ' + this.fons.position.y, 5, 15, 'DDDDDD');
+        
         /*
         // Play idle animation
         this.player.animations.play('idle');
@@ -162,7 +172,7 @@ shooter1942.level1 = {
         var pup = this.pups.getFirstExists(false);
         if (!pup) {
             pup = new shooter1942.power_up(this.game, Math.random() * gameOptions.gameWidth, 1, Math.trunc(Math.random() * 2.999) + 1, this.player);
-            this.pups.add(pup);
+            this.pups.add(this.pup);
         }
         else{
             pup.reset(Math.random() * gameOptions.gameWidth, 1);
