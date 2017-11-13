@@ -39,4 +39,11 @@ shooter1942.playerPrefab.prototype.update = function(){
     else{
         this.body.velocity.y = 0;
     }
+    if(this.body.velocity.x != 0 && this.body.velocity.y != 0){
+        this.aux = Math.sqrt(this.body.velocity.x * this.body.velocity.x + this.body.velocity.y * this.body.velocity.y);
+        this.body.velocity.x /= this.aux;
+        this.body.velocity.x *= this.speed;
+        this.body.velocity.y /= this.aux;
+        this.body.velocity.y *= this.speed;
+    }
 };
