@@ -26,6 +26,7 @@ shooter1942.level1 = {
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         this.escape = this.game.input.keyboard.addKey(Phaser.Keyboard.ESC);
+        this.x = this.game.input.keyboard.addKey(Phaser.Keyboard.X);
         
        
     },
@@ -54,33 +55,31 @@ shooter1942.level1 = {
         //this.player.animations.add('idle', [0,1], 10, true);
         //this.player.animations.add('roll', [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14], 10, true);
         
-        /*
+        
         //HUD RELATED
         //Rolls
-        this.player.rolls = 3;
-        this.rolls = this.game.add.image(gameOptions.gameWidth-60, gameOptions.gameHeight-30,'rolls', this.player.rolls);
+        this.rolls = this.game.add.image(gameOptions.gameWidth-60, gameOptions.gameHeight-30,'rolls');
         this.rolls.anchor.setTo(.5);
         this.rolls.scale.setTo(1.5);
-        //Lives
-        this.player.lives = 3;
-        this.lives = this.game.add.image(30, gameOptions.gameHeight-30,'lives', this.player.lives);
-        this.lives.anchor.setTo(.5);
-        this.lives.scale.setTo(1.5);
         //Rolls Text
-        this.rollsText = this.game.add.text(gameOptions.gameWidth-30, gameOptions.gameHeight-30, this.player.rolls);
+        this.rollsText = this.game.add.text(gameOptions.gameWidth-30, gameOptions.gameHeight-30, gameOptions.rolls);
         this.rollsText.anchor.setTo(.5);
         this.rollsText.fill = 'white';
-        this.rollsText.font='Arial Black';
+        this.rollsText.font='Press Start 2P';
         this.rollsText.stroke= 'black';
         //this.rollsText.strokeThikckness = 1;
+        //Lives
+        this.lives = this.game.add.image(30, gameOptions.gameHeight-30,'lives');
+        this.lives.anchor.setTo(.5);
+        this.lives.scale.setTo(1.5);
         //Lives Text
-        this.livesText = this.game.add.text(60, gameOptions.gameHeight-30, this.player.lives);
+        this.livesText = this.game.add.text(60, gameOptions.gameHeight-30, gameOptions.lives);
         this.livesText.anchor.setTo(.5);
         this.livesText.fill = 'white';
-        this.livesText.font='Arial Black';
+        this.livesText.font='Press Start 2P';
         this.livesText.stroke= 'black';
         //this.livesText.strokeThikckness = 2;
-        */
+                
         //Enemies
         this.loadEnemy();
         //this.enemy1Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 3, this.createEnemy, this);
@@ -94,15 +93,20 @@ shooter1942.level1 = {
     update:function(){
         //Exit
         if(this.escape.isDown){
-            this.state.start('menu');
+            this.quit();
         }
-        
+        //ROLLS WITH X
+        if(this.x.isDown && this.x.downDuration(1) && gameOptions.rolls > 0){
+            gameOptions.rolls--;
+            console.log(gameOptions.rolls);
+        }
         // Fer correr el fons, velocitat a GameOptions per tenir-ho generalitzat als 3 nivells
         this.fons.position.y += gameOptions.backgroundSpeed;
         
         // Si la posició del punt anclatge es mes gran a la mida del tile + finestra, atura d'avançar (final de nivell)
         if (this.fons.position.y >= 2048 + gameOptions.gameHeight) {
             gameOptions.backgroundSpeed = 0;
+            this.state.start('menu_highscore');
         }
         
         // Simple debug per anar coneixent la posició del fons, alomillor mes endevant podem fer un upgrade
@@ -142,7 +146,7 @@ shooter1942.level1 = {
         */
         //HUD
         //this.livesText.setText(this.player.lives);
-        //this.rollsText.setText(this.player.rolls);
+        this.rollsText.setText(gameOptions.rolls);
     
         
     },
