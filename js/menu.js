@@ -1,7 +1,7 @@
 var shooter1942 = shooter1942 || {};
 var id = 0;
 var minId = 0;
-var maxId = 1;
+var maxId = 2;
 
 shooter1942.menu = {
     preload:function(){
@@ -42,6 +42,12 @@ shooter1942.menu = {
         this.rankingText.font = 'Press Start 2P';
         this.rankingText.fill = 'white';
         this.rankingText.fontSize = 30;
+           //Credits
+        this.creditsText = this.game.add.text(gameOptions.gameWidth/2, gameOptions.gameHeight/2+80, 'CREDITS');
+        this.creditsText.anchor.setTo(.5);
+        this.creditsText.font = 'Press Start 2P';
+        this.creditsText.fill = 'white';
+        this.creditsText.fontSize = 30;
     },
     
     update:function(){
@@ -58,6 +64,7 @@ shooter1942.menu = {
         if(id == 0){
             this.playText.addColor('red',0);
             this.rankingText.addColor('white',0);
+            this.creditsText.addColor('white',0);
             if(this.enter.isDown){
                 this.startGame();
             }
@@ -65,8 +72,17 @@ shooter1942.menu = {
         else if(id==1){
             this.playText.addColor('white',0);
             this.rankingText.addColor('red',0);
+            this.creditsText.addColor('white',0);
             if(this.enter.isDown){
                 this.rankingMenu();
+            }
+        }
+        else if(id==2){
+            this.playText.addColor('white',0);
+            this.rankingText.addColor('white',0);
+            this.creditsText.addColor('red',0);
+            if(this.enter.isDown){
+                this.creditsMenu();
             }
         }
         
@@ -78,5 +94,8 @@ shooter1942.menu = {
     },
     rankingMenu:function(){
         this.state.start('menu_highscore');
+    },
+    creditsMenu:function(){
+        this.state.start('menu_credits');
     }
 };

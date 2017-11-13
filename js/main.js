@@ -27,6 +27,7 @@ WebFontConfig = {
 shooter1942.game.state.add('level1',shooter1942.level1);
 shooter1942.game.state.add('menu',shooter1942.menu);
 shooter1942.game.state.add('menu_highscore',shooter1942.menu_highscore);
+shooter1942.game.state.add('menu_credits',shooter1942.menu_credits);
 
 //STARTING SCENE
 shooter1942.game.state.start('menu');
