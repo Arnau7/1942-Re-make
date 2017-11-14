@@ -35,4 +35,5 @@ shooter1942.enemy1Prefab.prototype.update = function() {
         this.kill();
     }
     
+    
 }

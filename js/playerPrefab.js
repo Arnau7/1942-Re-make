@@ -19,6 +19,7 @@ shooter1942.playerPrefab = function(game, x, y, speed) {
     this.xKey = this.game.input.keyboard.addKey(Phaser.Keyboard.X);
     
     // Canvia la mida de la bounding box per ajustarla a l'sprite
+    
     this.body.setSize(17, 20, 9, 4);
     //this.provam = false;
     this.animations.play('idle');
@@ -35,9 +36,17 @@ shooter1942.playerPrefab.prototype.update = function(){
     
     if (this.cursors.left.isDown) {
         this.body.velocity.x = -this.speed;
+        if(this.canRoll)
+        {
+            this.frame = 2;
+        }
     }
     else if (this.cursors.right.isDown) {
         this.body.velocity.x = this.speed;
+         if(this.canRoll)
+        {
+            this.frame = 3;
+        }
     }
     else{
         this.body.velocity.x = 0;
@@ -77,7 +86,7 @@ shooter1942.playerPrefab.prototype.update = function(){
 shooter1942.playerPrefab.prototype.idle = function() {
     this.animations.play('idle');
     gameOptions.immunity = false;
-    console.log('Finished Roll');
+    console.log('Finished Roll\nVulnerable');
     this.canRoll = true;
 };
 shooter1942.playerPrefab.prototype.rolling = function() {
@@ -86,6 +95,7 @@ shooter1942.playerPrefab.prototype.rolling = function() {
         this.canRoll = false;
         gameOptions.rolls--;
         this.animations.play('roll');
+        console.log('Immune');
         this.game.time.events.add(Phaser.Timer.SECOND*1.5, this.idle,this);
     }
 };

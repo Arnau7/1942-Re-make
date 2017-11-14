@@ -28,7 +28,11 @@ shooter1942.level1 = {
         this.escape = this.game.input.keyboard.addKey(Phaser.Keyboard.ESC);
         this.x = this.game.input.keyboard.addKey(Phaser.Keyboard.X);
         
-       
+        //SOUND
+        this.load.audio('theme', 'sound/stage_theme.mp3');
+        //this.music = new Phaser.Sound(this.game, 'theme', 1, true);
+        this.load.audio('cleared','sound/stage_clear.mp3');
+        this.load.audio('over','sound/game_over.mp3');
     },
     
     create:function(){
@@ -86,8 +90,14 @@ shooter1942.level1 = {
         
         this.loadpUp();
         this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 5, this.createpUp, this);
+        gameOptions.backgroundSpeed = 0.8;
         // Physics
         //this.game.physics.arcade.enable(this.player);
+        this.soundtrack = this.add.audio('theme');
+        this.soundtrack.loopFull();
+        //this.music.play();
+        this.cleared = this.add.audio('cleared');
+        this.over = this.add.audio('over');
     },
     
     update:function(){
@@ -95,6 +105,7 @@ shooter1942.level1 = {
         if(this.escape.isDown){
             this.quit();
         }
+        
         //ROLLS WITH X
         /*if(this.x.isDown && this.x.downDuration(1) && gameOptions.rolls > 0){
             gameOptions.rolls--;
@@ -106,12 +117,14 @@ shooter1942.level1 = {
         // Si la posició del punt anclatge es mes gran a la mida del tile + finestra, atura d'avançar (final de nivell)
         if (this.fons.position.y >= 2048 + gameOptions.gameHeight) {
             gameOptions.backgroundSpeed = 0;
+            this.soundtrack.stop();
+            this.cleared.play();
             this.state.start('menu_highscore');
         }
         
         // Simple debug per anar coneixent la posició del fons, alomillor mes endevant podem fer un upgrade
         // i fer una barra de progrés (Ho deix com a proposta) de que te queda de nivell
-        //this.game.debug.text('Posició Y del fons: ' + this.fons.position.y, 5, 15, 'DDDDDD');
+        this.game.debug.text('Posició Y del fons: ' + this.fons.position.y, 5, 15, 'DDDDDD');
         
         /*
         // Play idle animation
@@ -148,9 +161,10 @@ shooter1942.level1 = {
         //this.livesText.setText(this.player.lives);
         this.rollsText.setText(gameOptions.rolls);
     
-        
+         this.game.physics.arcade.overlap(this.player, this.enemies, this.attacked, null, this);
     },
     quit:function(){
+        this.soundtrack.stop();
         this.state.start('menu');
     },
     loadEnemy:function(){
@@ -175,11 +189,16 @@ shooter1942.level1 = {
     createpUp:function(){
         var pup = this.pups.getFirstExists(false);
         if (!this.pup) {
-            this.pup = new shooter1942.power_up(this.game, Math.random() * gameOptions.gameWidth, 1, Math.trunc(Math.random() * 2.999) + 1, this.player);
+            this.pup = new shooter1942.power_up(this.game, Math.random() * gameOptions.gameWidth, 1, Math.trunc(Math.random() * 2.9999)+1, this.player);
             this.pups.add(this.pup);
         }
         else{
             this.pup.reset(Math.random() * gameOptions.gameWidth, 1);
         }
+    },
+    attacked:function(player, enemy){
+        enemy.kill();
+        console.log('Enemy Killed');
     }
+
 };

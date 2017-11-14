@@ -10,7 +10,7 @@ var gameOptions = {
     lives:          3,
     rolls:          3,
     score:           0,
-    backgroundSpeed: 0.8,
+    backgroundSpeed: 0,
     enemy1Speed:     110,
     immunity:       false
 };

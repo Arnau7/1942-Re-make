@@ -23,11 +23,11 @@ shooter1942.power_up.prototype.constructor = shooter1942.power_up;
 
 shooter1942.power_up.prototype.update = function() {
     this.body.velocity.y = gameOptions.powerup_speed;
-    this.game.debug.body(this);
-    //this.game.physics.arcade.collide(this, this.player, this.col());
+    //this.game.debug.body(this);
+    this.game.physics.arcade.collide(this, this.player, this.col());
 };
 shooter1942.power_up.prototype.col = function() {
-    console.log("penesito");
+      console.log("penesito");
     if(this.type == 0){
         
     }
