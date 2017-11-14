@@ -10,7 +10,7 @@ shooter1942.level1 = {
     
     preload:function(){
         // Load all sprites of the level
-        this.load.spritesheet('playerSprite', 'img/P_idle.png', 27, 18);
+        this.load.spritesheet('playerSprite', 'img/PlayerSpritesheet.png', 34, 27);
         this.load.spritesheet('playerRoll', 'img/P_roll.png', 34, 27);
         this.load.spritesheet('enemy1', 'img/E_01_idle.png', 17, 16);
         this.load.image('rolls', 'img/pUp_extraLife.png');
@@ -82,10 +82,10 @@ shooter1942.level1 = {
                 
         //Enemies
         this.loadEnemy();
-        //this.enemy1Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 3, this.createEnemy, this);
+        this.enemy1Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 3, this.createEnemy, this);
         
-        //this.loadpUp();
-        //this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 5, this.createpUp, this);
+        this.loadpUp();
+        this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 5, this.createpUp, this);
         // Physics
         //this.game.physics.arcade.enable(this.player);
     },
@@ -111,7 +111,7 @@ shooter1942.level1 = {
         
         // Simple debug per anar coneixent la posició del fons, alomillor mes endevant podem fer un upgrade
         // i fer una barra de progrés (Ho deix com a proposta) de que te queda de nivell
-        this.game.debug.text('Posició Y del fons: ' + this.fons.position.y, 5, 15, 'DDDDDD');
+        //this.game.debug.text('Posició Y del fons: ' + this.fons.position.y, 5, 15, 'DDDDDD');
         
         /*
         // Play idle animation
@@ -159,12 +159,12 @@ shooter1942.level1 = {
     },
     createEnemy:function(){
         var enemy = this.enemies.getFirstExists(false);
-        if (!enemy) {
-            enemy = new shooter1942.enemy1Prefab(this.game, Math.random() * gameOptions.gameWidth, 1, Math.trunc(Math.random() * 2.999));
-            this.enemies.add(enemy);
+        if (!this.enemy) {
+            this.enemy = new shooter1942.enemy1Prefab(this.game, Math.random() * gameOptions.gameWidth, 1, Math.trunc(Math.random() * 2.999));
+            this.enemies.add(this.enemy);
         }
         else{
-            enemy.reset(Math.random() * gameOptions.gameWidth, 1);
+            this.enemy.reset(Math.random() * gameOptions.gameWidth, 1);
         }
     },
     
@@ -174,12 +174,12 @@ shooter1942.level1 = {
     },
     createpUp:function(){
         var pup = this.pups.getFirstExists(false);
-        if (!pup) {
-            pup = new shooter1942.power_up(this.game, Math.random() * gameOptions.gameWidth, 1, Math.trunc(Math.random() * 2.999) + 1, this.player);
+        if (!this.pup) {
+            this.pup = new shooter1942.power_up(this.game, Math.random() * gameOptions.gameWidth, 1, Math.trunc(Math.random() * 2.999) + 1, this.player);
             this.pups.add(this.pup);
         }
         else{
-            pup.reset(Math.random() * gameOptions.gameWidth, 1);
+            this.pup.reset(Math.random() * gameOptions.gameWidth, 1);
         }
     }
 };

@@ -16,17 +16,15 @@ shooter1942.power_up = function(game, x, y, type, player){
     this.game.physics.arcade.enable(this);
     this.checkWorldBounds = true;
     this.outOfBoundsKill = true;
-    
-    this.body.velocity.y = gameOptions.powerup_speed;
 };
 
 shooter1942.power_up.prototype = Object.create(Phaser.Sprite.prototype);
 shooter1942.power_up.prototype.constructor = shooter1942.power_up;
 
 shooter1942.power_up.prototype.update = function() {
+    this.body.velocity.y = gameOptions.powerup_speed;
     this.game.debug.body(this);
-    //this.game.debug.body(this.game.playerPrefab);
-    //this.game.physics.arcade.collide(this, this.game.playerPrefab, this.col());
+    //this.game.physics.arcade.collide(this, this.player, this.col());
 };
 shooter1942.power_up.prototype.col = function() {
     console.log("penesito");

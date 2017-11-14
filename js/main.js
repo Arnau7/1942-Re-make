@@ -10,7 +10,8 @@ var gameOptions = {
     lives:          3,
     rolls:          3,
     score:           0,
-    backgroundSpeed: 0.8
+    backgroundSpeed: 0.8,
+    enemy1Speed:     110
 };
 
 shooter1942.game = new Phaser.Game(gameOptions.gameWidth, gameOptions.gameHeight, Phaser.AUTO,null,this,false,false);

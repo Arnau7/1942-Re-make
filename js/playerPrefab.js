@@ -9,17 +9,26 @@ shooter1942.playerPrefab = function(game, x, y, speed) {
     this.checkWorldBounds = true;
     //this.outOfBoundsKill = true;
     this.animations.add('idle', [0, 1], 10, true);
+    this.animations.add('roll', [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30], 10, true);
+
     this.speed = speed;
     
     this.game.add.existing(this);
     this.cursors = this.game.input.keyboard.createCursorKeys();
+    this.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    
+    // Canvia la mida de la bounding box per ajustarla a l'sprite
+    this.body.setSize(17, 20, 9, 4);
+    this.provam = false;
+    this.animations.play('idle');
+
 };
 // Crear el prefab de la bala
 shooter1942.playerPrefab.prototype = Object.create(Phaser.Sprite.prototype);
 shooter1942.playerPrefab.prototype.constructor = shooter1942.playerPrefab;
 
 shooter1942.playerPrefab.prototype.update = function(){
-    this.animations.play('idle');
+    //this.animations.play('idle');
     
     if (this.cursors.left.isDown) {
         this.body.velocity.x = -this.speed;
@@ -47,9 +56,22 @@ shooter1942.playerPrefab.prototype.update = function(){
         this.body.velocity.y *= this.speed;
     }
     
+    //this.game.debug.text(this.frame, 100, 200, 'DDDDDD');
+    
+    // No va, es queda bloquejat al roll
+    if(this.space.isDown) {
+        this.rolling();
+    }
+    //this.animations.play('idle');
     gameOptions.playerPosY = this.body.position.y;
 
     //Debug elements
-    this.game.debug.body(this);
-    this.game.debug.text(this.speed, this.body.position.x, this.body.position.y);
+    //this.game.debug.body(this);
+    //this.game.debug.text(this.speed, this.body.position.x, this.body.position.y);
 };
+
+shooter1942.playerPrefab.prototype.rolling = function() {
+    this.animations.play('roll', false, true);
+    //gameOptions.rolls--;
+};
+    
