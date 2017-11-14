@@ -96,10 +96,10 @@ shooter1942.level1 = {
             this.quit();
         }
         //ROLLS WITH X
-        if(this.x.isDown && this.x.downDuration(1) && gameOptions.rolls > 0){
+        /*if(this.x.isDown && this.x.downDuration(1) && gameOptions.rolls > 0){
             gameOptions.rolls--;
             console.log(gameOptions.rolls);
-        }
+        }*/
         // Fer correr el fons, velocitat a GameOptions per tenir-ho generalitzat als 3 nivells
         this.fons.position.y += gameOptions.backgroundSpeed;
         

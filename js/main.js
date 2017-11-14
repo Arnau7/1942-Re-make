@@ -3,7 +3,7 @@ var shooter1942 = shooter1942 || {};
 var gameOptions = {
     gameWidth:      336,
     gameHeight:     480,
-    playerSpeed:    100,
+    playerSpeed:    160,
     playerPosX:     0,
     playerPosY:     0,
     powerup_speed:  75,
@@ -11,7 +11,8 @@ var gameOptions = {
     rolls:          3,
     score:           0,
     backgroundSpeed: 0.8,
-    enemy1Speed:     110
+    enemy1Speed:     110,
+    immunity:       false
 };
 
 shooter1942.game = new Phaser.Game(gameOptions.gameWidth, gameOptions.gameHeight, Phaser.AUTO,null,this,false,false);
