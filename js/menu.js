@@ -12,6 +12,10 @@ shooter1942.menu = {
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         this.enter = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+        
+        this.load.audio('button','sound/sound_button.wav');
+        this.load.audio('select','sound/sound_select.wav');
+        this.load.audio('play','sound/sound_play.wav');
     },
     
     create:function(){
@@ -26,7 +30,9 @@ shooter1942.menu = {
         this.button.anchor.setTo(.5);
         this.button.scale.setTo(.1);*/
         
-       
+        this.buttonSound = this.add.audio('button');
+        this.buttonSelect = this.add.audio('select');
+        this.buttonPlay = this.add.audio('play');
         
         //TEXT BUTTONS
 
@@ -54,10 +60,12 @@ shooter1942.menu = {
         
         if(this.cursors.down.isDown && this.cursors.down.downDuration(1) && id < maxId){
             id++;
+            this.buttonSound.play();
             console.log(id);
         }
         else if(this.cursors.up.isDown && this.cursors.up.downDuration(1) && id > minId){
             id--;
+            this.buttonSound.play();
             console.log(id);
         }
         
@@ -66,6 +74,7 @@ shooter1942.menu = {
             this.rankingText.addColor('white',0);
             this.creditsText.addColor('white',0);
             if(this.enter.isDown){
+                this.buttonPlay.play();
                 this.startGame();
             }
         }
@@ -74,6 +83,7 @@ shooter1942.menu = {
             this.rankingText.addColor('red',0);
             this.creditsText.addColor('white',0);
             if(this.enter.isDown){
+                this.buttonSound.play();
                 this.rankingMenu();
             }
         }
@@ -82,11 +92,10 @@ shooter1942.menu = {
             this.rankingText.addColor('white',0);
             this.creditsText.addColor('red',0);
             if(this.enter.isDown){
+                this.buttonSound.play();
                 this.creditsMenu();
             }
-        }
-        
-        
+        }        
     },
     
     startGame:function(){
@@ -98,4 +107,5 @@ shooter1942.menu = {
     creditsMenu:function(){
         this.state.start('menu_credits');
     }
+
 };

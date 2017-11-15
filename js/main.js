@@ -13,6 +13,7 @@ var gameOptions = {
     backgroundSpeed: 0,
     enemy1Speed:     110,
     immunity:       false
+    
 };
 
 shooter1942.game = new Phaser.Game(gameOptions.gameWidth, gameOptions.gameHeight, Phaser.AUTO,null,this,false,false);

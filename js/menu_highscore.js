@@ -3,9 +3,16 @@ var shooter1942 = shooter1942 || {};
 shooter1942.menu_highscore = {
     preload:function(){
         this.escape = this.game.input.keyboard.addKey(Phaser.Keyboard.ESC);
+        
+         //this.load.audio('button','sound/sound_button.wav');
+         this.load.audio('select','sound/sound_select.wav');
+        
     },
     
     create:function(){
+         //this.buttonSound = this.add.audio('button');
+        this.buttonSelect = this.add.audio('select');
+        
         //TEXT
          this.returnText = this.game.add.text(gameOptions.gameWidth/2, gameOptions.gameHeight/1.1, 'Press ESC to return');
         this.returnText.anchor.setTo(.5);
@@ -22,6 +29,7 @@ shooter1942.menu_highscore = {
     
     update:function(){
         if(this.escape.isDown){
+            this.buttonSelect.play();
             this.state.start('menu');
         }
     }

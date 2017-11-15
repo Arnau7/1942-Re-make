@@ -33,9 +33,11 @@ shooter1942.level1 = {
         //this.music = new Phaser.Sound(this.game, 'theme', 1, true);
         this.load.audio('cleared','sound/stage_clear.mp3');
         this.load.audio('over','sound/game_over.mp3');
+         this.load.audio('select','sound/sound_select.wav');
     },
     
     create:function(){
+        this.buttonSelect = this.add.audio('select');
         // Crear un objecte fons, per poder canviar-li les variables i pintar-ho
         this.fons = this.game.add.tileSprite(0, 0, gameOptions.gameWidth, 2048, 'bg1');
         this.fons.scale.y = 1.5; // S'escala a 1'5 perque l'sprite és petit. 
@@ -165,6 +167,7 @@ shooter1942.level1 = {
     },
     quit:function(){
         this.soundtrack.stop();
+        this.buttonSelect.play();
         this.state.start('menu');
     },
     loadEnemy:function(){
