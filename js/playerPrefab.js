@@ -6,7 +6,7 @@ shooter1942.playerPrefab = function(game, x, y, speed) {
     this.scale.setTo(2);
     this.game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
-    this.checkWorldBounds = true;
+    //this.checkWorldBounds = true;
     //this.outOfBoundsKill = true;
     this.animations.add('idle', [0, 1], 10, true);
     this.animations.add('roll', [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30], 10, false,true);

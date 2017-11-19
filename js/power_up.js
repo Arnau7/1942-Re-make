@@ -1,6 +1,6 @@
 var shooter1942 = shooter1942 || {};
 
-shooter1942.power_up = function(game, x, y, type, player){
+shooter1942.power_up = function(game, x, y, type){
     if(type == 0)
         Phaser.Sprite.call(this, game, x, y, 'pUp_1');
     else if(type == 1)
@@ -10,10 +10,10 @@ shooter1942.power_up = function(game, x, y, type, player){
     else
         Phaser.Sprite.call(this, game, x, y, 'pUp_4');
     
-    this.player = player;
+    //this.player = player;
     this.type = type;
     this.anchor.setTo(.5);
-    this.game.physics.arcade.enable(this);
+    //this.game.physics.arcade.enable(this);
     this.checkWorldBounds = true;
     this.outOfBoundsKill = true;
 };
@@ -21,13 +21,13 @@ shooter1942.power_up = function(game, x, y, type, player){
 shooter1942.power_up.prototype = Object.create(Phaser.Sprite.prototype);
 shooter1942.power_up.prototype.constructor = shooter1942.power_up;
 
-shooter1942.power_up.prototype.update = function() {
+/*shooter1942.power_up.prototype.update = function() {
     this.body.velocity.y = gameOptions.powerup_speed;
     //this.game.debug.body(this);
     this.game.physics.arcade.collide(this, this.player, this.col());
 };
 shooter1942.power_up.prototype.col = function() {
-      console.log("penesito");
+      
     if(this.type == 0){
         
     }
@@ -43,4 +43,4 @@ shooter1942.power_up.prototype.col = function() {
         gameOptions.score += 1000;
         this.kill();
     }
-};
+};*/

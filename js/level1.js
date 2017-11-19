@@ -45,21 +45,7 @@ shooter1942.level1 = {
         this.fons.anchor.y = 0.84; // Aquest anchor en Y situa el punt d'anclatgef de l'imatge al punt exacte d'abaix, per poder correr cap adalt
         
        //Add the player
-        var player = new shooter1942.playerPrefab(this.game, gameOptions.gameWidth/2, gameOptions.gameHeight - 50, gameOptions.playerSpeed);
-        
-       /* this.player = new shooter1942.playerPrefab(this.game, gameOptions.gameWidth/2,gameOptions.gameHeight/2);
-        
-        console.log(this.player.position.x, this.player.position.y);*/
-        //this.game.add.existing(this.player);
-        //this.player = this.game.add.sprite(gameOptions.gameWidth/2,gameOptions.gameHeight/1.2,'playerSprite');
-        //this.player.anchor.setTo(.5);
-        //this.player.scale.setTo(1.8);
-        //this.player.speedX = gameOptions.playerSpeedX;
-        //this.player.speedY = gameOptions.playerSpeedY;
-        //this.game.physics.arcade.enable(this.player);
-        // Load animations
-        //this.player.animations.add('idle', [0,1], 10, true);
-        //this.player.animations.add('roll', [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14], 10, true);
+        this.player = new shooter1942.playerPrefab(this.game, gameOptions.gameWidth/2, gameOptions.gameHeight - 50, gameOptions.playerSpeed);
         
         
         //HUD RELATED
@@ -85,7 +71,13 @@ shooter1942.level1 = {
         this.livesText.font='Press Start 2P';
         this.livesText.stroke= 'black';
         //this.livesText.strokeThikckness = 2;
-                
+        //Score
+        //Score Text
+        this.scoreText = this.game.add.text(gameOptions.gameWidth/2, 30, gameOptions.score);
+        this.scoreText.anchor.setTo(.5);
+        this.scoreText.fill = 'white';
+        this.scoreText.font='Press Start 2P';
+        this.scoreText.stroke= 'black';
         //Enemies
         this.loadEnemy();
         this.enemy1Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 3, this.createEnemy, this);
@@ -128,42 +120,19 @@ shooter1942.level1 = {
         // i fer una barra de progrés (Ho deix com a proposta) de que te queda de nivell
         this.game.debug.text('Posició Y del fons: ' + this.fons.position.y, 5, 15, 'DDDDDD');
         
-        /*
-        // Play idle animation
-        this.player.animations.play('idle');
-        
-        // Player movement
-        if (this.cursors.left.isDown) {
-            //this.player.body.velocity.x -= this.player.speedX;
-            this.player.position.x -= this.player.speedX;
-        }
-        else if (this.cursors.right.isDown) {
-            //this.player.body.velocity.x += this.player.speedX;
-            this.player.position.x += this.player.speedX;
-
-        }
-        if (this.cursors.up.isDown) {
-            //this.player.body.velocity.y -= this.player.speedY;
-             this.player.position.y -= this.player.speedY;
-        }
-        else if (this.cursors.down.isDown) {
-           // this.player.body.velocity.y += this.player.speedY;
-            this.player.position.y += this.player.speedY;
-
-        }
-        
         // Player roll
         if (this.space.isDown && this.space.downDuration(1) && this.player.rolls > 0) {
             this.player.animations.play('roll');
             console.log('rolling');
             this.player.rolls -= 1;
         }
-        */
+        
         //HUD
-        //this.livesText.setText(this.player.lives);
+        this.livesText.setText(gameOptions.lives);
         this.rollsText.setText(gameOptions.rolls);
+        this.scoreText.setText(gameOptions.score);
     
-         this.game.physics.arcade.overlap(this.player, this.enemies, this.attacked, null, this);
+        this.game.physics.arcade.overlap(this.player, this.pups, this.attacked, null, this);
     },
     quit:function(){
         this.soundtrack.stop();
@@ -172,7 +141,7 @@ shooter1942.level1 = {
     },
     loadEnemy:function(){
         this.enemies = this.add.group();
-        this.enemies.enableBody = true;
+        //this.enemies.enableBody = true;
     },
     createEnemy:function(){
         var enemy = this.enemies.getFirstExists(false);
@@ -183,6 +152,7 @@ shooter1942.level1 = {
         else{
             this.enemy.reset(Math.random() * gameOptions.gameWidth, 1);
         }
+            
     },
     
     loadpUp:function(){
@@ -191,17 +161,42 @@ shooter1942.level1 = {
     },
     createpUp:function(){
         var pup = this.pups.getFirstExists(false);
-        if (!this.pup) {
-            this.pup = new shooter1942.power_up(this.game, Math.random() * gameOptions.gameWidth, 1, Math.trunc(Math.random() * 2.9999)+1, this.player);
-            this.pups.add(this.pup);
-        }
-        else{
-            this.pup.reset(Math.random() * gameOptions.gameWidth, 1);
-        }
+        var randomType = 0;
+        randomType = Math.trunc(Math.random()*2.9999)+1;
+        //if (!pup) {
+        //Si simplement es reseteja el power_up,el sprite no canvia. De la manera actual canvia d'sprite, tipus però pups es va omplint de nous objectes. No suposarà un problema ja que com a molt en un nivell es crearien 10 power_ups.
+            pup = new shooter1942.power_up(this.game, Math.random() * gameOptions.gameWidth, 1, randomType);
+            this.pups.add(pup);
+        //}
+        /*else{
+            pup.type = randomType;
+            pup.reset(Math.random() * gameOptions.gameWidth, 50);
+        }*/
+        pup.body.velocity.y = gameOptions.powerup_speed;
+        //this.game.add.existing(pup);
+        //console.log(randomType);
+        //console.log(this.pups.length);
     },
-    attacked:function(player, enemy){
-        enemy.kill();
-        console.log('Enemy Killed');
+    attacked:function(player, pup){
+        //console.log(pup.type);
+        //console.log('pup collected');
+        if(pup.type == 0){
+            
+        }
+        else if (pup.type == 1){
+            gameOptions.lives++;
+            console.log('+1 life');
+        }
+        else if(pup.type == 2){
+            gameOptions.rolls++;
+            console.log('+1 roll');
+        }
+        else if(pup.type == 3){
+            gameOptions.score += 1000;
+            console.log('+1000 points');
+        }
+        pup.kill();
+
     }
 
 };
