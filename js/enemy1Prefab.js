@@ -10,14 +10,13 @@ shooter1942.enemy1Prefab = function(game, x, y, dir){
     this.velocity = gameOptions.enemy1Speed;
     this.change = true;
     
-    this.body.velocity.y = this.velocity;
 };
 
 shooter1942.enemy1Prefab.prototype = Object.create(Phaser.Sprite.prototype);
 shooter1942.enemy1Prefab.prototype.constructor = shooter1942.enemy1Prefab;
 
-shooter1942.enemy1Prefab.prototype.update = function() {
-    //this.game.physics.arcade.collide(this, this.game.player, this.kill());
+/*shooter1942.enemy1Prefab.prototype.update = function() {
+    this.game.physics.arcade.collide(this, this.player, this.kill());
     if(this.direction != 0)
         this.velocity = Math.sqrt(2 * gameOptions.enemy1Speed * gameOptions.enemy1Speed);
     else
@@ -36,4 +35,4 @@ shooter1942.enemy1Prefab.prototype.update = function() {
     }
     
     
-}
+}*/

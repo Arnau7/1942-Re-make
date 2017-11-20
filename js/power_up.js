@@ -13,7 +13,7 @@ shooter1942.power_up = function(game, x, y, type){
     //this.player = player;
     this.type = type;
     this.anchor.setTo(.5);
-    //this.game.physics.arcade.enable(this);
+    this.game.physics.arcade.enable(this);
     this.checkWorldBounds = true;
     this.outOfBoundsKill = true;
 };

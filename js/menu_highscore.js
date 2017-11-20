@@ -14,7 +14,7 @@ shooter1942.menu_highscore = {
         this.buttonSelect = this.add.audio('select');
         
         //TEXT
-         this.returnText = this.game.add.text(gameOptions.gameWidth/2, gameOptions.gameHeight/1.1, 'Press ESC to return');
+        this.returnText = this.game.add.text(gameOptions.gameWidth/2, gameOptions.gameHeight/1.1, 'Press ESC to return');
         this.returnText.anchor.setTo(.5);
         this.returnText.font = 'Press Start 2P';
         this.returnText.fill = 'lightgrey';
@@ -25,6 +25,12 @@ shooter1942.menu_highscore = {
         this.rankingText.font = 'Press Start 2P';
         this.rankingText.fill = 'white';
         this.rankingText.fontSize = 30;
+        //Value
+        this.scoreText = this.game.add.text(30, gameOptions.gameHeight/5, 'YOUR SCORE:                      '+gameOptions.score);
+        this.scoreText.anchor.setTo(0);
+        this.scoreText.font = 'Press Start 2P';
+        this.scoreText.fill = 'yellow';
+        this.scoreText.fontSize = 18;
     },
     
     update:function(){

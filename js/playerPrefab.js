@@ -7,7 +7,7 @@ shooter1942.playerPrefab = function(game, x, y, speed) {
     this.game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
     //this.checkWorldBounds = true;
-    //this.outOfBoundsKill = true;
+    this.outOfBoundsKill = true;
     this.animations.add('idle', [0, 1], 10, true);
     this.animations.add('roll', [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30], 10, false,true);
 
@@ -25,6 +25,8 @@ shooter1942.playerPrefab = function(game, x, y, speed) {
     this.animations.play('idle');
     
     this.canRoll = true;
+
+    this.game.sound_roll = this.game.add.audio('rollSound');
    
 };
 // Crear el prefab de la bala
@@ -76,7 +78,6 @@ shooter1942.playerPrefab.prototype.update = function(){
         //this.rolling();
     }
 
-   
     gameOptions.playerPosY = this.body.position.y;
 
     //Debug elements
@@ -91,6 +92,7 @@ shooter1942.playerPrefab.prototype.idle = function() {
 };
 shooter1942.playerPrefab.prototype.rolling = function() {
     if(gameOptions.rolls > 0){
+        this.game.sound_roll.play();
         gameOptions.immunity = true;
         this.canRoll = false;
         gameOptions.rolls--;

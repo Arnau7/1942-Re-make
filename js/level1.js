@@ -10,10 +10,12 @@ shooter1942.level1 = {
     
     preload:function(){
         // Load all sprites of the level
-        this.load.spritesheet('playerSprite', 'img/PlayerSpritesheet.png', 34, 27);
+        this.load.spritesheet('playerSprite', 'img/PlayerSpritesheet.png', 34, 27); //Player
         this.load.spritesheet('playerRoll', 'img/P_roll.png', 34, 27);
-        this.load.spritesheet('enemy1', 'img/E_01_idle.png', 17, 16);
-        this.load.image('rolls', 'img/pUp_extraLife.png');
+        this.load.spritesheet('enemy1', 'img/E_01_idle.png', 17, 16);       //Enemy1
+        this.load.spritesheet('explosion','img/enemy_kill.png',19,17);       //Enemy death
+        this.load.image('double_bullet','img/double_bullet.png');    //Doble Bala
+        this.load.image('rolls', 'img/pUp_extraLife.png');                  
         this.load.image('lives', 'img/P_left.png');
         this.load.image('pUp_1', 'img/pUp_enemyCrash.png');
         this.load.image('pUp_2', 'img/pUp_extraLife.png');
@@ -26,14 +28,19 @@ shooter1942.level1 = {
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         this.escape = this.game.input.keyboard.addKey(Phaser.Keyboard.ESC);
-        this.x = this.game.input.keyboard.addKey(Phaser.Keyboard.X);
+        this.z = this.game.input.keyboard.addKey(Phaser.Keyboard.Z);
         
         //SOUND
         this.load.audio('theme', 'sound/stage_theme.mp3');
         //this.music = new Phaser.Sound(this.game, 'theme', 1, true);
         this.load.audio('cleared','sound/stage_clear.mp3');
         this.load.audio('over','sound/game_over.mp3');
-         this.load.audio('select','sound/sound_select.wav');
+        this.load.audio('select','sound/sound_select.wav');
+        this.load.audio('playerDeath','sound/sound_playerDeath.wav');
+        this.load.audio('shoot', 'sound/sound_shoot.mp3');
+        this.load.audio('enemyDeath', 'sound/sound_enemyDeath.wav');
+        this.game.load.audio('rollSound', 'sound/sound_roll.wav');
+
     },
     
     create:function(){
@@ -45,7 +52,7 @@ shooter1942.level1 = {
         this.fons.anchor.y = 0.84; // Aquest anchor en Y situa el punt d'anclatgef de l'imatge al punt exacte d'abaix, per poder correr cap adalt
         
        //Add the player
-        this.player = new shooter1942.playerPrefab(this.game, gameOptions.gameWidth/2, gameOptions.gameHeight - 50, gameOptions.playerSpeed);
+        this.player = new shooter1942.playerPrefab(this.game, gameOptions.gameWidth/2, gameOptions.gameHeight - 100, gameOptions.playerSpeed);
         
         
         //HUD RELATED
@@ -78,20 +85,30 @@ shooter1942.level1 = {
         this.scoreText.fill = 'white';
         this.scoreText.font='Press Start 2P';
         this.scoreText.stroke= 'black';
+        
+        //Bullets
+        this.loadBullets();
+
         //Enemies
         this.loadEnemy();
         this.enemy1Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 3, this.createEnemy, this);
-        
+        //PowerUps
         this.loadpUp();
         this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 5, this.createpUp, this);
+        //Explosiosn
+        this.loadExplosions();
+        
         gameOptions.backgroundSpeed = 0.8;
         // Physics
         //this.game.physics.arcade.enable(this.player);
         this.soundtrack = this.add.audio('theme');
         this.soundtrack.loopFull();
         //this.music.play();
-        this.cleared = this.add.audio('cleared');
-        this.over = this.add.audio('over');
+        this.music_cleared = this.add.audio('cleared');
+        this.music_over = this.add.audio('over');
+        this.sound_playerDeath = this.add.audio('playerDeath');
+        this.sound_shoot = this.add.audio('shoot');
+        this.sound_enemyDeath = this.add.audio('enemyDeath');
     },
     
     update:function(){
@@ -99,12 +116,15 @@ shooter1942.level1 = {
         if(this.escape.isDown){
             this.quit();
         }
+        if(gameOptions.lives < 0){
+            this.gameOver();
+        }
         
-        //ROLLS WITH X
-        /*if(this.x.isDown && this.x.downDuration(1) && gameOptions.rolls > 0){
-            gameOptions.rolls--;
-            console.log(gameOptions.rolls);
-        }*/
+        //Shoot with Z
+        if(this.z.isDown && this.z.downDuration(1) && !gameOptions.immunity){
+            this.createBullet();
+            //console.log(this.bullets.length);
+        }
         // Fer correr el fons, velocitat a GameOptions per tenir-ho generalitzat als 3 nivells
         this.fons.position.y += gameOptions.backgroundSpeed;
         
@@ -112,7 +132,7 @@ shooter1942.level1 = {
         if (this.fons.position.y >= 2048 + gameOptions.gameHeight) {
             gameOptions.backgroundSpeed = 0;
             this.soundtrack.stop();
-            this.cleared.play();
+            this.music_cleared.play();
             this.state.start('menu_highscore');
         }
         
@@ -121,43 +141,47 @@ shooter1942.level1 = {
         this.game.debug.text('Posició Y del fons: ' + this.fons.position.y, 5, 15, 'DDDDDD');
         
         // Player roll
-        if (this.space.isDown && this.space.downDuration(1) && this.player.rolls > 0) {
+        /*if (this.space.isDown && this.space.downDuration(1) && this.player.rolls > 0) {
             this.player.animations.play('roll');
             console.log('rolling');
             this.player.rolls -= 1;
-        }
+        }*/
         
         //HUD
         this.livesText.setText(gameOptions.lives);
         this.rollsText.setText(gameOptions.rolls);
         this.scoreText.setText(gameOptions.score);
     
-        this.game.physics.arcade.overlap(this.player, this.pups, this.attacked, null, this);
+       //Bala del player ha donat a un enemic 
+        this.game.physics.arcade.overlap(this.enemies,this.bullets,this.enemyGotHit,null,this);
+        //Player ha agafat un power-up
+        this.game.physics.arcade.overlap(this.player, this.pups, this.powerupContact, null, this);
+       //Player i enemic han xocat
+        this.game.physics.arcade.overlap(this.player,this.enemies,this.enemyCrash, null,this);
     },
-    quit:function(){
-        this.soundtrack.stop();
-        this.buttonSelect.play();
-        this.state.start('menu');
-    },
+   
     loadEnemy:function(){
         this.enemies = this.add.group();
         //this.enemies.enableBody = true;
     },
     createEnemy:function(){
         var enemy = this.enemies.getFirstExists(false);
-        if (!this.enemy) {
-            this.enemy = new shooter1942.enemy1Prefab(this.game, Math.random() * gameOptions.gameWidth, 1, Math.trunc(Math.random() * 2.999));
-            this.enemies.add(this.enemy);
+        if (!enemy) {
+            enemy = new shooter1942.enemy1Prefab(this.game, this.rnd.integerInRange(16,this.world.width -16), 1, Math.trunc(Math.random() * 2.999));
+            this.enemies.add(enemy);
         }
         else{
-            this.enemy.reset(Math.random() * gameOptions.gameWidth, 1);
+            enemy.reset(Math.random() * gameOptions.gameWidth, 1);
         }
-            
+        if(enemy.direction != 0)
+            enemy.velocity = Math.sqrt(2 * gameOptions.enemy1Speed * gameOptions.enemy1Speed);
+        else
+            enemy.velocity = gameOptions.enemy1Speed;
+        enemy.body.velocity.y = gameOptions.enemy1Speed; 
     },
-    
     loadpUp:function(){
         this.pups = this.add.group();
-        this.pups.enableBody = true;
+        //this.pups.enableBody = true;
     },
     createpUp:function(){
         var pup = this.pups.getFirstExists(false);
@@ -165,7 +189,7 @@ shooter1942.level1 = {
         randomType = Math.trunc(Math.random()*2.9999)+1;
         //if (!pup) {
         //Si simplement es reseteja el power_up,el sprite no canvia. De la manera actual canvia d'sprite, tipus però pups es va omplint de nous objectes. No suposarà un problema ja que com a molt en un nivell es crearien 10 power_ups.
-            pup = new shooter1942.power_up(this.game, Math.random() * gameOptions.gameWidth, 1, randomType);
+            pup = new shooter1942.power_up(this.game, this.rnd.integerInRange(16,this.world.width -16), 1, randomType);
             this.pups.add(pup);
         //}
         /*else{
@@ -175,11 +199,28 @@ shooter1942.level1 = {
         pup.body.velocity.y = gameOptions.powerup_speed;
         //this.game.add.existing(pup);
         //console.log(randomType);
-        //console.log(this.pups.length);
+        //console.log('Pups: '+this.pups.length);
     },
-    attacked:function(player, pup){
+    loadBullets:function(){
+        this.bullets = this.add.group();
+        this.bullets.enableBody = true;
+    },
+    createBullet:function(){
+        var bullet = this.bullets.getFirstExists(false);
+        this.sound_shoot.play();
+        if(!bullet){
+            bullet = new shooter1942.bulletPrefab(this.game, this.player.x, this.player.top);
+            this.bullets.add(bullet);
+        }
+        else{
+            bullet.reset(this.player.x, this.player.y);
+        }
+        bullet.body.velocity.y = gameOptions.bullet_playerSpeed;
+    },
+    powerupContact:function(player, pup){
         //console.log(pup.type);
         //console.log('pup collected');
+        this.buttonSelect.play();
         if(pup.type == 0){
             
         }
@@ -195,8 +236,55 @@ shooter1942.level1 = {
             gameOptions.score += 1000;
             console.log('+1000 points');
         }
-        pup.kill();
+        pup.destroy();
 
+    },
+    loadExplosions:function(){
+        this.explosions = this.add.group();
+    },
+    createExplosion:function(_x, _y){
+        var explosion = this.explosions.getFirstExists(false);
+        if(!explosion){
+            explosion = new shooter1942.explosionPrefab(this.game,_x, _y);
+            this.explosions.add(explosion);
+        }
+        else{
+            explosion.reset(_x,_y);
+        }
+        explosion.animations.play('explode',10,false,true);
+    },
+    enemyCrash:function(player,enemy){
+        if(!gameOptions.immunity){
+            console.log('Enemy Crash')
+            this.sound_playerDeath.play();
+            this.createExplosion(player.position.x, player.position.y);
+            //this.explosions.scale.setTo(4);
+            enemy.kill();
+            gameOptions.score += 30;
+            gameOptions.lives--;
+            this.resetLevel();
+        }
+    },
+    enemyGotHit:function(enemy, bullet){
+        console.log('Enemy killed');
+        this.sound_enemyDeath.play();
+        this.createExplosion(enemy.position.x, enemy.position.y);
+        bullet.kill();
+        enemy.kill();
+        gameOptions.score += 30;
+    },
+    resetLevel:function(){
+        this.player.position.x = gameOptions.gameWidth/2;
+        this.player.position.y = gameOptions.gameHeight - 100;
+    },
+    quit:function(){
+        this.soundtrack.stop();
+        this.buttonSelect.play();
+        this.state.start('menu');
+    },
+    gameOver:function(){
+        this.soundtrack.stop();
+        this.music_over.play();
+        this.state.start('menu_highscore');
     }
-
 };

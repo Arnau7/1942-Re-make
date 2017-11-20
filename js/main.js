@@ -12,6 +12,7 @@ var gameOptions = {
     score:           0,
     backgroundSpeed: 0,
     enemy1Speed:     110,
+    bullet_playerSpeed: -400,
     immunity:       false
     
 };
