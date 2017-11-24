@@ -54,6 +54,9 @@ shooter1942.menu = {
         this.creditsText.font = 'Press Start 2P';
         this.creditsText.fill = 'white';
         this.creditsText.fontSize = 30;
+        
+        gameOptions.lives = 2;
+        gameOptions.rolls = 3;
     },
     
     update:function(){
@@ -102,6 +105,7 @@ shooter1942.menu = {
         this.state.start('level1');
     },
     rankingMenu:function(){
+        gameOptions.cameFromMenu = true;
         this.state.start('menu_highscore');
     },
     creditsMenu:function(){

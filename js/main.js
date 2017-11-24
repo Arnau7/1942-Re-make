@@ -7,13 +7,14 @@ var gameOptions = {
     playerPosX:     0,
     playerPosY:     0,
     powerup_speed:  75,
-    lives:          3,
+    lives:          2,
     rolls:          3,
     score:           0,
     backgroundSpeed: 0,
     enemy1Speed:     110,
     bullet_playerSpeed: -400,
-    immunity:       false
+    immunity:       false,
+    cameFromMenu:   false
     
 };
 

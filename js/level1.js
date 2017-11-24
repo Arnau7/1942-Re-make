@@ -4,7 +4,7 @@ shooter1942.level1 = {
     init:function(){
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         gameOptions.score = 0;
-        gameOptions.lives = 3;
+        gameOptions.lives = 2;
         gameOptions.rolls = 3;
     },
     

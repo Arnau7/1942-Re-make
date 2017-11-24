@@ -33,15 +33,18 @@ shooter1942.menu_highscore = {
         this.scoreText.fontSize = 18;
         
         //DEATH/COMPLETION TEXT
-        if(gameOptions.lives < 0)
+        if(gameOptions.lives < 0 && !gameOptions.cameFromMenu)
         {
-            this.finalText = this.game.add.text(gameOptions.gameWidth/2,       gameOptions.gameHeight/6.25, 'YOU DIED');
+            this.finalText = this.game.add.text(gameOptions.gameWidth/2, gameOptions.gameHeight/6.25, 'YOU DIED');
             this.finalText.fill = 'red';
         }
-        else if(gameOptions.lives >= 0)
+        else if(gameOptions.lives >= 0 && !gameOptions.cameFromMenu)
         {
-           this.finalText = this.game.add.text(gameOptions.gameWidth/2,       gameOptions.gameHeight/6.25, 'LEVEL COMPLETED');
+            this.finalText = this.game.add.text(gameOptions.gameWidth/2, gameOptions.gameHeight/6.25, 'LEVEL COMPLETED');
             this.finalText.fill = 'lightblue';
+        }
+        else if (gameOptions.cameFromMenu){
+            this.finalText = this.game.add.text(gameOptions.gameWidth/2, gameOptions.gameHeight/6.25, '');
         }
         this.finalText.anchor.setTo(0.5);
         this.finalText.font = 'Press Start 2P';
@@ -51,6 +54,7 @@ shooter1942.menu_highscore = {
     update:function(){
         if(this.escape.isDown){
             this.buttonSelect.play();
+            gameOptions.cameFromMenu = false;
             this.state.start('menu');
         }
     }
