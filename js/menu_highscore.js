@@ -31,6 +31,21 @@ shooter1942.menu_highscore = {
         this.scoreText.font = 'Press Start 2P';
         this.scoreText.fill = 'yellow';
         this.scoreText.fontSize = 18;
+        
+        //DEATH/COMPLETION TEXT
+        if(gameOptions.lives < 0)
+        {
+            this.finalText = this.game.add.text(gameOptions.gameWidth/2,       gameOptions.gameHeight/6.25, 'YOU DIED');
+            this.finalText.fill = 'red';
+        }
+        else if(gameOptions.lives >= 0)
+        {
+           this.finalText = this.game.add.text(gameOptions.gameWidth/2,       gameOptions.gameHeight/6.25, 'LEVEL COMPLETED');
+            this.finalText.fill = 'lightblue';
+        }
+        this.finalText.anchor.setTo(0.5);
+        this.finalText.font = 'Press Start 2P';
+        this.finalText.fontSize = 18;
     },
     
     update:function(){

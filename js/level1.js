@@ -91,7 +91,7 @@ shooter1942.level1 = {
 
         //Enemies
         this.loadEnemy();
-        this.enemy1Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 3, this.createEnemy, this);
+        this.enemy1Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 0.1, this.createEnemy, this);
         //PowerUps
         this.loadpUp();
         this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 5, this.createpUp, this);
@@ -112,6 +112,8 @@ shooter1942.level1 = {
     },
     
     update:function(){
+        gameOptions.enemy1Speed = this.rnd.integerInRange(100,200);
+        
         //Exit
         if(this.escape.isDown){
             this.quit();
@@ -257,6 +259,7 @@ shooter1942.level1 = {
         if(!gameOptions.immunity){
             console.log('Enemy Crash')
             this.sound_playerDeath.play();
+            this.camera.shake(0.05,250);
             this.createExplosion(player.position.x, player.position.y);
             //this.explosions.scale.setTo(4);
             enemy.kill();
