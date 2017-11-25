@@ -46,10 +46,10 @@ shooter1942.level1 = {
     create:function(){
         this.buttonSelect = this.add.audio('select');
         // Crear un objecte fons, per poder canviar-li les variables i pintar-ho
-        this.fons = this.game.add.tileSprite(0, 0, gameOptions.gameWidth, 2048, 'bg1');
+        this.fons = this.game.add.tileSprite(0, 0, gameOptions.gameWidth, 3072, 'bg1');
         this.fons.scale.y = 1.5; // S'escala a 1'5 perque l'sprite és petit. 
         this.fons.scale.x = 1.5; // Està calculat que en X, si s'escala en 1'5 dona un numero exacte, que es el width de la finestra
-        this.fons.anchor.y = 0.84; // Aquest anchor en Y situa el punt d'anclatgef de l'imatge al punt exacte d'abaix, per poder correr cap adalt        
+        this.fons.anchor.y = 0.89; // Aquest anchor en Y situa el punt d'anclatgef de l'imatge al punt exacte d'abaix, per poder correr cap adalt        
         
         //HUD RELATED
         //Rolls
@@ -130,7 +130,7 @@ shooter1942.level1 = {
         this.fons.position.y += gameOptions.backgroundSpeed;
         
         // Si la posició del punt anclatge es mes gran a la mida del tile + finestra, atura d'avançar (final de nivell)
-        if (this.fons.position.y >= 2048 + gameOptions.gameHeight) {
+        if (this.fons.position.y >= 3072 +gameOptions.gameHeight * 2) {
             gameOptions.backgroundSpeed = 0;
             this.soundtrack.stop();
             this.music_cleared.play();
