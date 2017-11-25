@@ -35,7 +35,7 @@ shooter1942.menu_highscore = {
         //DEATH/COMPLETION TEXT
         if(gameOptions.lives < 0 && !gameOptions.cameFromMenu)
         {
-            this.finalText = this.game.add.text(gameOptions.gameWidth/2, gameOptions.gameHeight/6.25, 'YOU DIED');
+            this.finalText = this.game.add.text(gameOptions.gameWidth/2, gameOptions.gameHeight/6.25, 'GAME OVER');
             this.finalText.fill = 'red';
         }
         else if(gameOptions.lives >= 0 && !gameOptions.cameFromMenu)

@@ -49,11 +49,7 @@ shooter1942.level1 = {
         this.fons = this.game.add.tileSprite(0, 0, gameOptions.gameWidth, 2048, 'bg1');
         this.fons.scale.y = 1.5; // S'escala a 1'5 perque l'sprite és petit. 
         this.fons.scale.x = 1.5; // Està calculat que en X, si s'escala en 1'5 dona un numero exacte, que es el width de la finestra
-        this.fons.anchor.y = 0.84; // Aquest anchor en Y situa el punt d'anclatgef de l'imatge al punt exacte d'abaix, per poder correr cap adalt
-        
-       //Add the player
-        this.player = new shooter1942.playerPrefab(this.game, gameOptions.gameWidth/2, gameOptions.gameHeight - 100, gameOptions.playerSpeed);
-        
+        this.fons.anchor.y = 0.84; // Aquest anchor en Y situa el punt d'anclatgef de l'imatge al punt exacte d'abaix, per poder correr cap adalt        
         
         //HUD RELATED
         //Rolls
@@ -97,6 +93,9 @@ shooter1942.level1 = {
         this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 5, this.createpUp, this);
         //Explosiosn
         this.loadExplosions();
+        
+        //Add the player
+        this.player = new shooter1942.playerPrefab(this.game, gameOptions.gameWidth/2, gameOptions.gameHeight - 100, gameOptions.playerSpeed);
         
         gameOptions.backgroundSpeed = 0.8;
         // Physics
@@ -168,17 +167,32 @@ shooter1942.level1 = {
     },
     createEnemy:function(){
         var enemy = this.enemies.getFirstExists(false);
-        if (!enemy) {
+        if (!enemy) 
+        {
             enemy = new shooter1942.enemy1Prefab(this.game, this.rnd.integerInRange(16,this.world.width -16), 1, Math.trunc(Math.random() * 2.999));
             this.enemies.add(enemy);
         }
-        else{
-            enemy.reset(Math.random() * gameOptions.gameWidth, 1);
+        else
+        {
+            enemy.reset(this.rnd.integerInRange(16,this.world.width -16), 1);
         }
+        enemy.body.velocity.x = enemy.direction * enemy.velocity;
         if(enemy.direction != 0)
-            enemy.velocity = Math.sqrt(2 * gameOptions.enemy1Speed * gameOptions.enemy1Speed);
+            enemy.velocity = Math.sqrt(1*gameOptions.enemy1Speed * gameOptions.enemy1Speed);
         else
             enemy.velocity = gameOptions.enemy1Speed;
+        
+        if(enemy.body.position.y >= this.player.position.y - 30 && enemy.change)
+        {
+            enemy.body.velocity.y = -this.velocity;
+            enemy.change = false;
+        }
+        else if(!enemy.change && enemy.body.position.y <= 0)
+        {
+            enemy.body.velocity.y = enemy.velocity;
+            enemy.change = true;
+            enemy.kill();
+        }
         enemy.body.velocity.y = gameOptions.enemy1Speed; 
     },
     loadpUp:function(){
