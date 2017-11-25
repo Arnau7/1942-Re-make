@@ -87,7 +87,7 @@ shooter1942.level1 = {
 
         //Enemies
         this.loadEnemy();
-        this.enemy1Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 0.1, this.createEnemy, this);
+        this.enemy1Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 2, this.createEnemy, this);
         //PowerUps
         this.loadpUp();
         this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 5, this.createpUp, this);
@@ -182,7 +182,7 @@ shooter1942.level1 = {
         else
             enemy.velocity = gameOptions.enemy1Speed;
         
-        if(enemy.body.position.y >= this.player.position.y - 30 && enemy.change)
+        /*if(enemy.body.position.y >= this.player.position.y - 30 && enemy.change)
         {
             enemy.body.velocity.y = -this.velocity;
             enemy.change = false;
@@ -192,7 +192,7 @@ shooter1942.level1 = {
             enemy.body.velocity.y = enemy.velocity;
             enemy.change = true;
             enemy.kill();
-        }
+        }*/
         enemy.body.velocity.y = gameOptions.enemy1Speed; 
     },
     loadpUp:function(){
