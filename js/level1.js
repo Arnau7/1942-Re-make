@@ -21,6 +21,7 @@ shooter1942.level1 = {
         this.load.image('pUp_2', 'img/pUp_extraLife.png');
         this.load.image('pUp_3', 'img/pUp_loop.png');
         this.load.image('pUp_4', 'img/pUp_points.png');
+        this.load.image('enemy_bullet','img/enemy_bullet1.png');
         
         this.load.image('bg1', 'img/level1.png');
         
@@ -84,7 +85,7 @@ shooter1942.level1 = {
         
         //Bullets
         this.loadBullets();
-
+        this.loadBulletsEnemy();
         //Enemies
         this.loadEnemy();
         this.enemy1Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 2, this.createEnemy, this);
@@ -95,7 +96,8 @@ shooter1942.level1 = {
         this.loadExplosions();
         
         //Add the player
-        this.player = new shooter1942.playerPrefab(this.game, gameOptions.gameWidth/2, gameOptions.gameHeight - 100, gameOptions.playerSpeed);
+        this.createPlayer();
+ 
         
         gameOptions.backgroundSpeed = 0.8;
         // Physics
@@ -108,11 +110,12 @@ shooter1942.level1 = {
         this.sound_playerDeath = this.add.audio('playerDeath');
         this.sound_shoot = this.add.audio('shoot');
         this.sound_enemyDeath = this.add.audio('enemyDeath');
+        
+        //this.modulus();
     },
     
     update:function(){
         gameOptions.enemy1Speed = this.rnd.integerInRange(100,200);
-        
         //Exit
         if(this.escape.isDown){
             this.quit();
@@ -120,6 +123,9 @@ shooter1942.level1 = {
         if(gameOptions.lives < 0){
             this.gameOver();
         }
+        
+        //EnemyShooting
+        //this.createBulletEnemy(this.enemies);
         
         //Shoot with Z
         if(this.z.isDown && this.z.downDuration(1) && !gameOptions.immunity){
@@ -159,8 +165,12 @@ shooter1942.level1 = {
         this.game.physics.arcade.overlap(this.player, this.pups, this.powerupContact, null, this);
        //Player i enemic han xocat
         this.game.physics.arcade.overlap(this.player,this.enemies,this.enemyCrash, null,this);
+        //Bala de l'enemic ha donat al player
+        this.game.physics.arcade.overlap(this.player, this.bulletsEnemy, this.playerGotHit, null,this);
     },
-   
+    createPlayer:function(){
+            this.player = new shooter1942.playerPrefab(this.game, gameOptions.gameWidth/2, gameOptions.gameHeight - 100, gameOptions.playerSpeed);
+    },
     loadEnemy:function(){
         this.enemies = this.add.group();
         //this.enemies.enableBody = true;
@@ -171,18 +181,20 @@ shooter1942.level1 = {
         {
             enemy = new shooter1942.enemy1Prefab(this.game, this.rnd.integerInRange(16,this.world.width -16), 1, Math.trunc(Math.random() * 2.999));
             this.enemies.add(enemy);
+           
         }
         else
         {
             enemy.reset(this.rnd.integerInRange(16,this.world.width -16), 1);
         }
-        enemy.body.velocity.x = enemy.direction * enemy.velocity;
-        if(enemy.direction != 0)
+         this.createBulletEnemy(enemy);
+        //enemy.body.velocity.x = enemy.direction * enemy.velocity;
+        /*if(enemy.direction != 0)
             enemy.velocity = Math.sqrt(1*gameOptions.enemy1Speed * gameOptions.enemy1Speed);
         else
             enemy.velocity = gameOptions.enemy1Speed;
         
-        /*if(enemy.body.position.y >= this.player.position.y - 30 && enemy.change)
+        if(enemy.body.position.y >= this.player.position.y - 30 && enemy.change)
         {
             enemy.body.velocity.y = -this.velocity;
             enemy.change = false;
@@ -232,6 +244,23 @@ shooter1942.level1 = {
             bullet.reset(this.player.x, this.player.y);
         }
         bullet.body.velocity.y = gameOptions.bullet_playerSpeed;
+    },
+    loadBulletsEnemy:function(){
+        this.bulletsEnemy = this.add.group();
+        this.bulletsEnemy.enableBody = true;
+    },
+    createBulletEnemy:function(enemy){
+        var bulletEnemy = this.bulletsEnemy.getFirstExists(false);
+        if(!bulletEnemy){
+            bulletEnemy = new shooter1942.bulletEnemyPrefab(this.game, this.player.x, enemy.bottom);
+            this.bulletsEnemy.add(bulletEnemy);
+        }
+        else{
+            bulletEnemy.reset(enemy.x, enemy.y);
+        }
+        bulletEnemy.body.velocity.x = (this.player.position.x - enemy.position.x);
+        bulletEnemy.body.velocity.y = (this.player.position.y - enemy.position.y);
+        //bulletEnemy.body.velocity.y = gameOptions.bullet_enemySpeed;
     },
     powerupContact:function(player, pup){
         //console.log(pup.type);
@@ -290,7 +319,20 @@ shooter1942.level1 = {
         enemy.kill();
         gameOptions.score += 30;
     },
+    playerGotHit:function(player, bulletEnemy){
+        if(!gameOptions.immunity){
+            console.log('Player killed');
+            this.sound_playerDeath.play();
+            this.camera.shake(0.05,250);
+            this.createExplosion(this.player.position.x, this.player.position.y);
+            bulletEnemy.kill();
+            gameOptions.lives--; 
+            this.resetLevel();
+        }
+    },    
     resetLevel:function(){
+        this.player.kill();
+        this.game.time.events.add(Phaser.Timer.SECOND*1.5, this.createPlayer,this);
         this.player.position.x = gameOptions.gameWidth/2;
         this.player.position.y = gameOptions.gameHeight - 100;
     },
@@ -304,4 +346,20 @@ shooter1942.level1 = {
         this.music_over.play();
         this.state.start('menu_highscore');
     }
+    /*modulusX:function(pX){
+        var vector = this.player.position.x - pX;
+        var mod = Math.sqrt(vector * vector);
+        console.log(mod);
+        var norm = vector/mod;
+        console.log(norm);
+        return norm;
+    },
+        modulusY:function(pY){
+        var vector = Math.abs(this.player.position.y - pY);
+        var mod = Math.sqrt(vector * vector);
+        console.log(mod);
+        var norm = vector/mod;
+        console.log(norm);
+        return norm;
+    }*/
 };
