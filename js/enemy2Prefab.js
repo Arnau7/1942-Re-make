@@ -8,7 +8,7 @@ shooter1942.enemy2Prefab = function(game, x, y){
     this.outOfBoundsKill = true;
     this.phase = 0;
     
-    this.loadBulletsEnemy();
+    //this.loadBulletsEnemy();
 };
 
 shooter1942.enemy2Prefab.prototype = Object.create(Phaser.Sprite.prototype);
