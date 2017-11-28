@@ -23,7 +23,8 @@ shooter1942.level1 = {
         this.load.image('pUp_3', 'img/pUp_loop.png');
         this.load.image('pUp_4', 'img/pUp_points.png');
         this.load.image('enemy_bullet','img/enemy_bullet1.png');
-        
+        this.load.image('rollIcon','img/roll_Icon.png');
+
         this.load.image('bg1', 'img/level1.png');
         
         // Map cursor keys and Spacebar
@@ -55,9 +56,9 @@ shooter1942.level1 = {
         
         //HUD RELATED
         //Rolls
-        this.rolls = this.game.add.image(gameOptions.gameWidth-60, gameOptions.gameHeight-30,'rolls');
+        this.rolls = this.game.add.image(gameOptions.gameWidth-60, gameOptions.gameHeight-33,'rollIcon');
         this.rolls.anchor.setTo(.5);
-        this.rolls.scale.setTo(1.5);
+        this.rolls.scale.setTo(0.75);
         //Rolls Text
         this.rollsText = this.game.add.text(gameOptions.gameWidth-30, gameOptions.gameHeight-30, gameOptions.rolls);
         this.rollsText.anchor.setTo(.5);
@@ -205,7 +206,7 @@ shooter1942.level1 = {
         //}
         //else
         //{
-        //    enemy.reset(this.rnd.integerInRange(16,this.world.width -16), 1);
+            //enemy.reset(this.rnd.integerInRange(16,this.world.width -16), 1);
         //}
         
         switch(type){
