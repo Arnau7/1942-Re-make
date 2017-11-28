@@ -11,12 +11,13 @@ var gameOptions = {
     rolls:          3,
     score:           0,
     backgroundSpeed: 0,
-    enemy1Speed:     110,
+    enemy1Speed:       110,
+    enemy1BulletSpeed: 200,
+    enemy2Speed:       70,
     bullet_playerSpeed: -400,
     bullet_enemySpeed: 200,
     immunity:       false,
     cameFromMenu:   false
-    
 };
 
 shooter1942.game = new Phaser.Game(gameOptions.gameWidth, gameOptions.gameHeight, Phaser.AUTO,null,this,false,false);

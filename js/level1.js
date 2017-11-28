@@ -13,8 +13,9 @@ shooter1942.level1 = {
         this.load.spritesheet('playerSprite', 'img/PlayerSpritesheet.png', 34, 27); //Player
         this.load.spritesheet('playerRoll', 'img/P_roll.png', 34, 27);
         this.load.spritesheet('enemy1', 'img/E_01_idle.png', 17, 16);       //Enemy1
-        this.load.spritesheet('explosion','img/enemy_kill.png',19,17);       //Enemy death
-        this.load.image('double_bullet','img/double_bullet.png');    //Doble Bala
+        this.load.spritesheet('enemy2', 'img/E_02.png', 33, 29);            //Enemy2
+        this.load.spritesheet('explosion','img/enemy_kill.png',19,17);      //Enemy death
+        this.load.image('double_bullet','img/double_bullet.png');           //Doble Bala
         this.load.image('rolls', 'img/pUp_extraLife.png');                  
         this.load.image('lives', 'img/P_left.png');
         this.load.image('pUp_1', 'img/pUp_enemyCrash.png');
@@ -115,7 +116,8 @@ shooter1942.level1 = {
     },
     
     update:function(){
-        gameOptions.enemy1Speed = this.rnd.integerInRange(100,200);
+        gameOptions.playerPosY = this.player.body.position.y;
+        gameOptions.playerPosX = this.player.body.position.x;
         //Exit
         if(this.escape.isDown){
             this.quit();
@@ -168,45 +170,86 @@ shooter1942.level1 = {
         //Bala de l'enemic ha donat al player
         this.game.physics.arcade.overlap(this.player, this.bulletsEnemy, this.playerGotHit, null,this);
     },
+    
+
+    //---------------PLAYER FUNCTIONS-----------------------
+    
     createPlayer:function(){
             this.player = new shooter1942.playerPrefab(this.game, gameOptions.gameWidth/2, gameOptions.gameHeight - 100, gameOptions.playerSpeed);
     },
+    playerGotHit:function(player, bulletEnemy){
+        if(!gameOptions.immunity){
+            console.log('Player killed');
+            this.sound_playerDeath.play();
+            this.camera.shake(0.05,250);
+            this.createExplosion(this.player.position.x, this.player.position.y);
+            bulletEnemy.kill();
+            gameOptions.lives--; 
+            this.resetLevel();
+        }
+    },
+    
+    
+    //---------------ENEMY FUNCTIONS------------------------
+    
     loadEnemy:function(){
         this.enemies = this.add.group();
-        //this.enemies.enableBody = true;
     },
-    createEnemy:function(){
-        var enemy = this.enemies.getFirstExists(false);
-        if (!enemy) 
-        {
-            enemy = new shooter1942.enemy1Prefab(this.game, this.rnd.integerInRange(16,this.world.width -16), 1, Math.trunc(Math.random() * 2.999));
-            this.enemies.add(enemy);
+    createEnemy:function(type){
+        //var enemy = this.enemies.getFirstExists(false);
+        //if (!enemy) 
+        //{
+            enemy = new shooter1942.enemy2Prefab(this.game, this.rnd.integerInRange(16,this.world.width -16), 1);
+            //this.enemies.add(enemy);
            
-        }
-        else
-        {
-            enemy.reset(this.rnd.integerInRange(16,this.world.width -16), 1);
-        }
-         this.createBulletEnemy(enemy);
-        //enemy.body.velocity.x = enemy.direction * enemy.velocity;
-        /*if(enemy.direction != 0)
-            enemy.velocity = Math.sqrt(1*gameOptions.enemy1Speed * gameOptions.enemy1Speed);
-        else
-            enemy.velocity = gameOptions.enemy1Speed;
+        //}
+        //else
+        //{
+        //    enemy.reset(this.rnd.integerInRange(16,this.world.width -16), 1);
+        //}
         
-        if(enemy.body.position.y >= this.player.position.y - 30 && enemy.change)
-        {
-            enemy.body.velocity.y = -this.velocity;
-            enemy.change = false;
+        switch(type){
+            case 1:
+                enemy = new shooter1942.enemy1Prefab(this.game, this.rnd.integerInRange(16,this.world.width -16), 1);
+                break;
+            case 2:
+                enemy = new shooter1942.enemy1Prefab(this.game, this.rnd.integerInRange(16,this.world.width -16), 1);
+                break;
+            default:
+                console.log("enemy type " + type + " doesn't exist");
+                break;
         }
-        else if(!enemy.change && enemy.body.position.y <= 0)
-        {
-            enemy.body.velocity.y = enemy.velocity;
-            enemy.change = true;
-            enemy.kill();
-        }*/
-        enemy.body.velocity.y = gameOptions.enemy1Speed; 
+        
+        this.enemies.add(enemy);
+        
+        //this.createBulletEnemy(enemy);
     },
+    
+    enemyCrash:function(player,enemy){
+        if(!gameOptions.immunity){
+            console.log('Enemy Crash')
+            this.sound_playerDeath.play();
+            this.camera.shake(0.05,250);
+            this.createExplosion(player.position.x, player.position.y);
+            //this.explosions.scale.setTo(4);
+            enemy.kill();
+            gameOptions.score += 30;
+            gameOptions.lives--;
+            this.resetLevel();
+        }
+    },
+    enemyGotHit:function(enemy, bullet){
+        console.log('Enemy killed');
+        this.sound_enemyDeath.play();
+        this.createExplosion(enemy.position.x, enemy.position.y);
+        bullet.kill();
+        enemy.kill();
+        gameOptions.score += 30;
+    },
+    
+    
+    //---------------POWR UP FUNCTIONS----------------------
+    
     loadpUp:function(){
         this.pups = this.add.group();
         //this.pups.enableBody = true;
@@ -229,39 +272,7 @@ shooter1942.level1 = {
         //console.log(randomType);
         //console.log('Pups: '+this.pups.length);
     },
-    loadBullets:function(){
-        this.bullets = this.add.group();
-        this.bullets.enableBody = true;
-    },
-    createBullet:function(){
-        var bullet = this.bullets.getFirstExists(false);
-        this.sound_shoot.play();
-        if(!bullet){
-            bullet = new shooter1942.bulletPrefab(this.game, this.player.x, this.player.top);
-            this.bullets.add(bullet);
-        }
-        else{
-            bullet.reset(this.player.x, this.player.y);
-        }
-        bullet.body.velocity.y = gameOptions.bullet_playerSpeed;
-    },
-    loadBulletsEnemy:function(){
-        this.bulletsEnemy = this.add.group();
-        this.bulletsEnemy.enableBody = true;
-    },
-    createBulletEnemy:function(enemy){
-        var bulletEnemy = this.bulletsEnemy.getFirstExists(false);
-        if(!bulletEnemy){
-            bulletEnemy = new shooter1942.bulletEnemyPrefab(this.game, this.player.x, enemy.bottom);
-            this.bulletsEnemy.add(bulletEnemy);
-        }
-        else{
-            bulletEnemy.reset(enemy.x, enemy.y);
-        }
-        bulletEnemy.body.velocity.x = (this.player.position.x - enemy.position.x);
-        bulletEnemy.body.velocity.y = (this.player.position.y - enemy.position.y);
-        //bulletEnemy.body.velocity.y = gameOptions.bullet_enemySpeed;
-    },
+    
     powerupContact:function(player, pup){
         //console.log(pup.type);
         //console.log('pup collected');
@@ -284,6 +295,53 @@ shooter1942.level1 = {
         pup.destroy();
 
     },
+    
+    
+    //---------------BULLETS FUNCTIONS----------------------
+
+    loadBullets:function(){
+        this.bullets = this.add.group();
+        this.bullets.enableBody = true;
+    },
+    createBullet:function(){
+        var bullet = this.bullets.getFirstExists(false);
+        this.sound_shoot.play();
+        if(!bullet){
+            bullet = new shooter1942.bulletPrefab(this.game, this.player.x, this.player.top);
+            this.bullets.add(bullet);
+        }
+        else{
+            bullet.reset(this.player.x, this.player.y);
+        }
+        bullet.body.velocity.y = gameOptions.bullet_playerSpeed;
+    },
+    
+    loadBulletsEnemy:function(){
+        this.bulletsEnemy = this.add.group();
+        this.bulletsEnemy.enableBody = true;
+    },
+    createBulletEnemy:function(enemy){
+        var bulletEnemy = this.bulletsEnemy.getFirstExists(false);
+        if(!bulletEnemy){
+            bulletEnemy = new shooter1942.bulletEnemyPrefab(this.game, this.player.x, enemy.bottom);
+            this.bulletsEnemy.add(bulletEnemy);
+        }
+        else{
+            bulletEnemy.reset(enemy.x, enemy.y);
+        }
+        this.dir_x = (this.player.body.position.x - enemy.body.position.x);
+        this.dir_y = (this.player.body.position.y - enemy.body.position.y);
+        this.dir_mod = Math.sqrt(this.dir_x * this.dir_x + this.dir_y * this.dir_y);
+        this.dir_x /= this.dir_mod;
+        this.dir_y /= this.dir_mod;
+        
+        bulletEnemy.body.velocity.x = this.dir_x * gameOptions.enemy1BulletSpeed;
+        bulletEnemy.body.velocity.y = this.dir_y * gameOptions.enemy1BulletSpeed;
+        //bulletEnemy.body.velocity.y = gameOptions.bullet_enemySpeed;
+    },
+
+//---------------EXPLOSIONS-----------------------------
+    
     loadExplosions:function(){
         this.explosions = this.add.group();
     },
@@ -298,38 +356,10 @@ shooter1942.level1 = {
         }
         explosion.animations.play('explode',10,false,true);
     },
-    enemyCrash:function(player,enemy){
-        if(!gameOptions.immunity){
-            console.log('Enemy Crash')
-            this.sound_playerDeath.play();
-            this.camera.shake(0.05,250);
-            this.createExplosion(player.position.x, player.position.y);
-            //this.explosions.scale.setTo(4);
-            enemy.kill();
-            gameOptions.score += 30;
-            gameOptions.lives--;
-            this.resetLevel();
-        }
-    },
-    enemyGotHit:function(enemy, bullet){
-        console.log('Enemy killed');
-        this.sound_enemyDeath.play();
-        this.createExplosion(enemy.position.x, enemy.position.y);
-        bullet.kill();
-        enemy.kill();
-        gameOptions.score += 30;
-    },
-    playerGotHit:function(player, bulletEnemy){
-        if(!gameOptions.immunity){
-            console.log('Player killed');
-            this.sound_playerDeath.play();
-            this.camera.shake(0.05,250);
-            this.createExplosion(this.player.position.x, this.player.position.y);
-            bulletEnemy.kill();
-            gameOptions.lives--; 
-            this.resetLevel();
-        }
-    },    
+
+
+    //---------------LEVEL FUNCTIONS------------------------
+    
     resetLevel:function(){
         this.player.kill();
         this.game.time.events.add(Phaser.Timer.SECOND*1.5, this.createPlayer,this);
@@ -346,20 +376,4 @@ shooter1942.level1 = {
         this.music_over.play();
         this.state.start('menu_highscore');
     }
-    /*modulusX:function(pX){
-        var vector = this.player.position.x - pX;
-        var mod = Math.sqrt(vector * vector);
-        console.log(mod);
-        var norm = vector/mod;
-        console.log(norm);
-        return norm;
-    },
-        modulusY:function(pY){
-        var vector = Math.abs(this.player.position.y - pY);
-        var mod = Math.sqrt(vector * vector);
-        console.log(mod);
-        var norm = vector/mod;
-        console.log(norm);
-        return norm;
-    }*/
 };
