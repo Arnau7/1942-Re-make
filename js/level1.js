@@ -90,11 +90,13 @@ shooter1942.level1 = {
         this.loadBulletsEnemy();
         //Enemies
         this.loadEnemy();
-        this.enemy1Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 15, this.createEnemy1, this);
-        this.enemy2Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 20, this.createEnemy2, this);
+        this.enemy1Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 8, this.createEnemy1, this);
+        this.enemy2Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 24, this.createEnemy2, this);
+        this.enemy1Timer2 = this.game.time.events.loop(Phaser.Timer.SECOND * 32, this.createEnemy1, this);
+        this.enemy2Timer2 = this.game.time.events.loop(Phaser.Timer.SECOND * 40, this.createEnemy2, this);
         //PowerUps
         this.loadpUp();
-        this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 5, this.createpUp, this);
+        this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 60, this.createpUp, this);
         //Explosiosn
         this.loadExplosions();
         
@@ -196,7 +198,11 @@ shooter1942.level1 = {
     
     loadEnemy:function(){
         this.enemies = this.add.group();
-    },
+    },    
+    /*callEnemy1:function(){
+        this.TimerEnemy = this.game.time.events.loop(Phaser.Timer.SECOND, this.createEnemy1, this);
+        this.game.time.events.remove(this.TimerEnemy);
+    },*/
     createEnemy1:function(){
         //var enemy = this.enemies.getFirstExists(false);
         //if (!enemy) 
@@ -373,7 +379,7 @@ shooter1942.level1 = {
         //bulletEnemy.body.velocity.y = gameOptions.bullet_enemySpeed;
     },
 
-//---------------EXPLOSIONS-----------------------------
+    //---------------EXPLOSIONS-----------------------------
     
     loadExplosions:function(){
         this.explosions = this.add.group();

@@ -8,6 +8,7 @@ shooter1942.enemy1Prefab = function(game, x, y){
     this.outOfBoundsKill = true;    
     this.hitsLeft = 1;
     this.enemyType = 1;
+    this.shoot = true;
     
     //-------------------DIRECTION-----------------------
     this.direction_x = gameOptions.playerPosX - this.body.position.x;
@@ -27,7 +28,14 @@ shooter1942.enemy1Prefab.prototype.constructor = shooter1942.enemy1Prefab;
 shooter1942.enemy1Prefab.prototype.update = function() {
 //    if(this.body.position.y == 50)
 //        shooter1942.level1.createBulletEnemy(this);
-    if(this.body.position.y >= gameOptions.playerPosY - 10)
+    if(this.shoot){
+        if(this.body.position.y >= gameOptions.playerPosY - 150 && this.body.position.y <= gameOptions.playerPosY - 140){
+            shooter1942.level1.createBulletEnemy(this);
+            this.shoot = false;
+        }
+    }
+    if(this.body.position.y >= gameOptions.playerPosY - 10){
         this.body.velocity.y = -this.direction_y * gameOptions.enemy1Speed;
-    
+        this.shoot = true;
+    }
 }

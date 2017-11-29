@@ -13,7 +13,7 @@ var gameOptions = {
     backgroundSpeed: 0,
     enemy1Speed:       110,
     enemy1BulletSpeed: 200,
-    enemy2Speed:       70,
+    enemy2Speed:       100,
     bullet_playerSpeed: -400,
     bullet_enemySpeed: 200,
     immunity:       false,
