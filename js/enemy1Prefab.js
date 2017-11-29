@@ -2,6 +2,9 @@ var shooter1942 = shooter1942 || {};
 
 shooter1942.enemy1Prefab = function(game, x, y){
     Phaser.Sprite.call(this, game, x, y, 'enemy1');
+    this.animations.add('E_idle', [0, 1], 10, true);
+    this.animations.add('E_flip', [2, 3, 4, 5, 6, 7], 10, false);
+    this.animations.play('E_idle');
     this.anchor.setTo(.5);
     this.game.physics.arcade.enable(this);
     this.checkWorldBounds = true;
@@ -35,7 +38,9 @@ shooter1942.enemy1Prefab.prototype.update = function() {
         }
     }
     if(this.body.position.y >= gameOptions.playerPosY - 10){
+        this.animations.play('E_flip');
         this.body.velocity.y = -this.direction_y * gameOptions.enemy1Speed;
         this.shoot = true;
+        
     }
 }
