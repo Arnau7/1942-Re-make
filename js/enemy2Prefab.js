@@ -41,12 +41,16 @@ shooter1942.enemy2Prefab.prototype.update = function() {
         case 3:
             this.body.velocity.x = -gameOptions.enemy2Speed;
             this.body.velocity.y = 0;
-            if(this.body.position.x <= 64)
+            if(this.body.position.x <= 64){
+                shooter1942.level1.createBulletEnemy(this);
                 this.phase++;
+            }
             break;
         case 4:
             this.body.velocity.x = 0;
             this.body.velocity.y = gameOptions.enemy2Speed;
+            if(this.body.position.y == gameOptions.gameHeight * 3/4)
+                shooter1942.level1.createBulletEnemy(this);
             break;
         default:
             break;
