@@ -22,7 +22,10 @@ shooter1942.enemy1Prefab = function(game, x, y){
 shooter1942.enemy1Prefab.prototype = Object.create(Phaser.Sprite.prototype);
 shooter1942.enemy1Prefab.prototype.constructor = shooter1942.enemy1Prefab;
 
-shooter1942.enemy1Prefab.prototype.update = function() {    
+shooter1942.enemy1Prefab.prototype.update = function() {
+    if(this.body.position.y == 50)
+        shooter1942.level1.createBulletEnemy(this);
     if(this.body.position.y >= gameOptions.playerPosY - 10)
         this.body.velocity.y = -this.direction_y * gameOptions.enemy1Speed;
+    
 }

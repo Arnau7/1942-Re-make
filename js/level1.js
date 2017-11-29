@@ -90,7 +90,8 @@ shooter1942.level1 = {
         this.loadBulletsEnemy();
         //Enemies
         this.loadEnemy();
-        this.enemy1Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 2, this.createEnemy, this);
+        this.enemy1Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 15, this.createEnemy1, this);
+        this.enemy2Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 20, this.createEnemy2, this);
         //PowerUps
         this.loadpUp();
         this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 5, this.createpUp, this);
@@ -196,34 +197,28 @@ shooter1942.level1 = {
     loadEnemy:function(){
         this.enemies = this.add.group();
     },
-    createEnemy:function(type){
+    createEnemy1:function(){
         //var enemy = this.enemies.getFirstExists(false);
         //if (!enemy) 
         //{
-            enemy = new shooter1942.enemy2Prefab(this.game, this.rnd.integerInRange(16,this.world.width -16), 1);
-            //this.enemies.add(enemy);
-           
+        for(var i = 0; i < 4; i++){
+            var enemy = new shooter1942.enemy1Prefab(this.game, this.rnd.integerInRange(16,this.world.width -16), 1);
+            this.enemies.add(enemy);
+        }
         //}
         //else
         //{
             //enemy.reset(this.rnd.integerInRange(16,this.world.width -16), 1);
         //}
         
-        switch(type){
-            case 1:
-                enemy = new shooter1942.enemy1Prefab(this.game, this.rnd.integerInRange(16,this.world.width -16), 1);
-                break;
-            case 2:
-                enemy = new shooter1942.enemy1Prefab(this.game, this.rnd.integerInRange(16,this.world.width -16), 1);
-                break;
-            default:
-                console.log("enemy type " + type + " doesn't exist");
-                break;
-        }
-        
-        this.enemies.add(enemy);
+        //this.enemies.add(enemy);
         
         //this.createBulletEnemy(enemy);
+    },
+    createEnemy2:function(){
+        var enemy = new shooter1942.enemy2Prefab(this.game, this.rnd.integerInRange(16,this.world.width/2), 1);
+        
+        this.enemies.add(enemy);
     },
     
     enemyCrash:function(player,enemy){
