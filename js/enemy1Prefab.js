@@ -6,6 +6,8 @@ shooter1942.enemy1Prefab = function(game, x, y){
     this.game.physics.arcade.enable(this);
     this.checkWorldBounds = true;
     this.outOfBoundsKill = true;    
+    this.hitsLeft = 1;
+    this.enemyType = 1;
     
     //-------------------DIRECTION-----------------------
     this.direction_x = gameOptions.playerPosX - this.body.position.x;

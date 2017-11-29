@@ -223,24 +223,61 @@ shooter1942.level1 = {
     
     enemyCrash:function(player,enemy){
         if(!gameOptions.immunity){
-            console.log('Enemy Crash')
-            this.sound_playerDeath.play();
-            this.camera.shake(0.05,250);
-            this.createExplosion(player.position.x, player.position.y);
-            //this.explosions.scale.setTo(4);
-            enemy.kill();
-            gameOptions.score += 30;
-            gameOptions.lives--;
-            this.resetLevel();
+            if(enemy.hitsLeft == 1) {
+                console.log('Enemy Crash')
+                this.sound_playerDeath.play();
+                this.camera.shake(0.05,125);
+                this.createExplosion(player.position.x, player.position.y);
+                //this.explosions.scale.setTo(4);
+                enemy.kill();
+                gameOptions.lives--;
+
+                switch (enemy.enemyType) {
+                    case 1:
+                        gameOptions.score += 50;
+                    case 2:
+                        gameOptions.score += 1000;
+                    default: 
+                        break;
+                }
+
+                this.resetLevel();
+            }
+            
+            else {
+                enemy.hitsLeft--;
+                 this.sound_playerDeath.play();
+                this.camera.shake(0.05,250);
+                this.createExplosion(player.position.x, player.position.y);
+                gameOptions.lives--;
+                this.resetLevel();
+            }
         }
     },
     enemyGotHit:function(enemy, bullet){
-        console.log('Enemy killed');
-        this.sound_enemyDeath.play();
-        this.createExplosion(enemy.position.x, enemy.position.y);
-        bullet.kill();
-        enemy.kill();
-        gameOptions.score += 30;
+        if (enemy.hitsLeft == 1) {
+            console.log('Enemy killed');
+            this.sound_enemyDeath.play();
+            this.createExplosion(enemy.position.x, enemy.position.y);
+            bullet.kill();
+            enemy.kill();
+            switch (enemy.enemyType) {
+                case 1:
+                    gameOptions.score += 50;
+                case 2:
+                    gameOptions.score += 1000;
+                default: 
+                    break;
+
+            }
+        }
+        
+        else {
+            enemy.hitsLeft--;
+            bullet.kill();
+            gameOptions.score += 100;
+
+        }
     },
     
     

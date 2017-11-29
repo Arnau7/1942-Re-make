@@ -7,6 +7,8 @@ shooter1942.enemy2Prefab = function(game, x, y){
     this.checkWorldBounds = true;
     this.outOfBoundsKill = true;
     this.phase = 0;
+    this.hitsLeft = 5;
+    this.enemyType = 2;
     
     //this.loadBulletsEnemy();
 };
