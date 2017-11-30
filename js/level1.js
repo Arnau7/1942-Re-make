@@ -96,7 +96,11 @@ shooter1942.level1 = {
         this.enemy2Timer2 = this.game.time.events.loop(Phaser.Timer.SECOND * 30, this.createEnemy2, this);
         //PowerUps
         this.loadpUp();
+<<<<<<< HEAD
         this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 40, this.createpUp, this);
+=======
+        this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 2, this.createpUp, this);
+>>>>>>> origin/master
         //Explosiosn
         this.loadExplosions();
         
@@ -134,7 +138,7 @@ shooter1942.level1 = {
         //this.createBulletEnemy(this.enemies);
         
         //Shoot with Z
-        if(this.z.isDown && this.z.downDuration(1) && !gameOptions.immunity && gameOptions.playerCanShoot){
+        if(this.z.isDown && this.z.downDuration(1) && !gameOptions.immunity && !this.player.respawning){
             this.createBullet();
             //console.log(this.bullets.length);
         }
@@ -181,6 +185,13 @@ shooter1942.level1 = {
     createPlayer:function(){
         this.player = new shooter1942.playerPrefab(this.game, gameOptions.gameWidth/2, gameOptions.gameHeight - 100, gameOptions.playerSpeed);
         gameOptions.playerCanShoot = true;
+    },
+    playerRespawn:function(){
+        //this.player.frame = 0;
+        this.player.position.x = gameOptions.gameWidth/2;
+        this.player.position.y = gameOptions.gameHeight - 100;
+        this.player.respawning = false;
+        gameOptions.immunity = false;
     },
     playerGotHit:function(player, bulletEnemy){
         if(!gameOptions.immunity){
@@ -328,15 +339,15 @@ shooter1942.level1 = {
         }
         else if (pup.type == 1){
             gameOptions.lives++;
-            console.log('+1 life');
+            //console.log('+1 life');
         }
         else if(pup.type == 2){
             gameOptions.rolls++;
-            console.log('+1 roll');
+           //console.log('+1 roll');
         }
         else if(pup.type == 3){
             gameOptions.score += 1000;
-            console.log('+1000 points');
+            //console.log('+1000 points');
         }
         pup.destroy();
 
@@ -407,11 +418,10 @@ shooter1942.level1 = {
     //---------------LEVEL FUNCTIONS------------------------
     
     resetLevel:function(){
-        gameOptions.playerCanShoot = false;
-        this.player.kill();
-        this.game.time.events.add(Phaser.Timer.SECOND*1.5, this.createPlayer,this);
-        this.player.position.x = gameOptions.gameWidth/2;
-        this.player.position.y = gameOptions.gameHeight - 100;
+        //this.player.kill();
+        gameOptions.immunity = true;
+        this.player.respawning = true;
+        this.game.time.events.add(Phaser.Timer.SECOND*1.5, this.playerRespawn,this);
     },
     quit:function(){
         this.soundtrack.stop();

@@ -12,7 +12,7 @@ shooter1942.enemy1Prefab = function(game, x, y){
     this.hitsLeft = 1;
     this.enemyType = 1;
     this.shoot = true;
-    
+
     //-------------------DIRECTION-----------------------
     this.direction_x = gameOptions.playerPosX - this.body.position.x;
     this.direction_y = gameOptions.playerPosY - this.body.position.y;
