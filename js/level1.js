@@ -379,7 +379,7 @@ shooter1942.level1 = {
     createBulletEnemy:function(enemy){
         var bulletEnemy = this.bulletsEnemy.getFirstExists(false);
         if(!bulletEnemy){
-            bulletEnemy = new shooter1942.bulletEnemyPrefab(this.game, this.player.x, enemy.bottom);
+            bulletEnemy = new shooter1942.bulletEnemyPrefab(this.game, enemy.x, enemy.bottom);
             this.bulletsEnemy.add(bulletEnemy);
         }
         else{
