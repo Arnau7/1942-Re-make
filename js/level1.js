@@ -134,7 +134,7 @@ shooter1942.level1 = {
         //this.createBulletEnemy(this.enemies);
         
         //Shoot with Z
-        if(this.z.isDown && this.z.downDuration(1) && !gameOptions.immunity){
+        if(this.z.isDown && this.z.downDuration(1) && !gameOptions.immunity && gameOptions.playerCanShoot){
             this.createBullet();
             //console.log(this.bullets.length);
         }
@@ -179,7 +179,8 @@ shooter1942.level1 = {
     //---------------PLAYER FUNCTIONS-----------------------
     
     createPlayer:function(){
-            this.player = new shooter1942.playerPrefab(this.game, gameOptions.gameWidth/2, gameOptions.gameHeight - 100, gameOptions.playerSpeed);
+        this.player = new shooter1942.playerPrefab(this.game, gameOptions.gameWidth/2, gameOptions.gameHeight - 100, gameOptions.playerSpeed);
+        gameOptions.playerCanShoot = true;
     },
     playerGotHit:function(player, bulletEnemy){
         if(!gameOptions.immunity){
@@ -241,8 +242,10 @@ shooter1942.level1 = {
                 switch (enemy.enemyType) {
                     case 1:
                         gameOptions.score += 50;
+                        break;
                     case 2:
                         gameOptions.score += 1000;
+                        break;
                     default: 
                         break;
                 }
@@ -280,6 +283,7 @@ shooter1942.level1 = {
         
         else {
             enemy.hitsLeft--;
+            this.sound_enemyDeath.play();
             bullet.kill();
             gameOptions.score += 100;
 
@@ -400,6 +404,7 @@ shooter1942.level1 = {
     //---------------LEVEL FUNCTIONS------------------------
     
     resetLevel:function(){
+        gameOptions.playerCanShoot = false;
         this.player.kill();
         this.game.time.events.add(Phaser.Timer.SECOND*1.5, this.createPlayer,this);
         this.player.position.x = gameOptions.gameWidth/2;
