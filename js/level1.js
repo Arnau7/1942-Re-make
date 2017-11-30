@@ -118,6 +118,8 @@ shooter1942.level1 = {
         this.sound_enemyDeath = this.add.audio('enemyDeath');
         
         //this.modulus();
+        gameOptions.playerRespawning = false;
+        gameOptions.immunity = false;
     },
     
     update:function(){
