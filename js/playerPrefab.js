@@ -25,9 +25,9 @@ shooter1942.playerPrefab = function(game, x, y, speed) {
     this.animations.play('idle');
     
     this.canRoll = true;
-    this.respawning = false;
-    
     this.game.sound_roll = this.game.add.audio('rollSound');
+    
+    gameOptions.playerRespawning = false;
    
 };
 // Crear el prefab de la bala
@@ -36,7 +36,8 @@ shooter1942.playerPrefab.prototype.constructor = shooter1942.playerPrefab;
 
 shooter1942.playerPrefab.prototype.update = function(){
     //this.animations.play('idle');
-     if(this.respawning){
+
+     if(gameOptions.playerRespawning){
         //console.log('respawning: ' + this.respawning);
         this.frame = 4;
     }

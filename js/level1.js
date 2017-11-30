@@ -135,7 +135,7 @@ shooter1942.level1 = {
         //this.createBulletEnemy(this.enemies);
         
         //Shoot with Z
-        if(this.z.isDown && this.z.downDuration(1) && !gameOptions.immunity && !this.player.respawning){
+        if(this.z.isDown && this.z.downDuration(1) && !gameOptions.immunity && !gameOptions.playerRespawning){
             this.createBullet();
             //console.log(this.bullets.length);
         }
@@ -187,7 +187,7 @@ shooter1942.level1 = {
         //this.player.frame = 0;
         this.player.position.x = gameOptions.gameWidth/2;
         this.player.position.y = gameOptions.gameHeight - 100;
-        this.player.respawning = false;
+        gameOptions.playerRespawning = false;
         gameOptions.immunity = false;
     },
     playerGotHit:function(player, bulletEnemy){
@@ -417,7 +417,7 @@ shooter1942.level1 = {
     resetLevel:function(){
         //this.player.kill();
         gameOptions.immunity = true;
-        this.player.respawning = true;
+        gameOptions.playerRespawning = true;
         this.game.time.events.add(Phaser.Timer.SECOND*1.5, this.playerRespawn,this);
     },
     quit:function(){
