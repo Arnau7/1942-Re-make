@@ -190,6 +190,12 @@ shooter1942.level1 = {
         this.player.position.x = gameOptions.gameWidth/2;
         this.player.position.y = gameOptions.gameHeight - 100;
         gameOptions.playerRespawning = false;
+        this.player.tint = 0x444444;
+        this.game.time.events.add(Phaser.Timer.SECOND*2, this.playerImmunity,this);
+        
+    },
+    playerImmunity:function(){
+        this.player.tint = 0xffffff;
         gameOptions.immunity = false;
     },
     playerGotHit:function(player, bulletEnemy){
@@ -295,6 +301,7 @@ shooter1942.level1 = {
         }
         
         else {
+            this.createExplosion(enemy.position.x, enemy.position.y);
             enemy.hitsLeft--;
             this.sound_enemyDeath.play();
             bullet.kill();
