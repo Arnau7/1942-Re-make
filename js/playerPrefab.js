@@ -25,7 +25,8 @@ shooter1942.playerPrefab = function(game, x, y, speed) {
     this.animations.play('idle');
     
     this.canRoll = true;
-
+    this.respawning = false;
+    
     this.game.sound_roll = this.game.add.audio('rollSound');
    
 };
@@ -35,50 +36,58 @@ shooter1942.playerPrefab.prototype.constructor = shooter1942.playerPrefab;
 
 shooter1942.playerPrefab.prototype.update = function(){
     //this.animations.play('idle');
+     if(this.respawning){
+        //console.log('respawning: ' + this.respawning);
+        this.frame = 4;
+    }
+    else
+    {
     
-    if (this.cursors.left.isDown) {
-        this.body.velocity.x = -this.speed;
-        if(this.canRoll)
-        {
-            this.frame = 2;
+        if (this.cursors.left.isDown) {
+            this.body.velocity.x = -this.speed;
+            if(this.canRoll)
+            {
+                this.frame = 2;
+            }
         }
-    }
-    else if (this.cursors.right.isDown) {
-        this.body.velocity.x = this.speed;
-         if(this.canRoll)
-        {
-            this.frame = 3;
+        else if (this.cursors.right.isDown) {
+            this.body.velocity.x = this.speed;
+            if(this.canRoll)
+            {
+                this.frame = 3;
+            }
         }
-    }
-    else{
-        this.body.velocity.x = 0;
-    }
-    if (this.cursors.up.isDown) {
-        this.body.velocity.y = -this.speed;
-    }
-    else if (this.cursors.down.isDown) {
-        this.body.velocity.y = this.speed;
-    }
-    else{
-        this.body.velocity.y = 0;
-    }
-    if(this.body.velocity.x != 0 && this.body.velocity.y != 0){
-        this.aux = Math.sqrt(this.body.velocity.x * this.body.velocity.x + this.body.velocity.y * this.body.velocity.y);
-        this.body.velocity.x /= this.aux;
-        this.body.velocity.x *= this.speed;
-        this.body.velocity.y /= this.aux;
-        this.body.velocity.y *= this.speed;
-    }
+        else{
+            this.body.velocity.x = 0;
+        }
+        if (this.cursors.up.isDown) {
+            this.body.velocity.y = -this.speed;
+        }
+        else if (this.cursors.down.isDown) {
+            this.body.velocity.y = this.speed;
+        }
+        else{
+            this.body.velocity.y = 0;
+        }
+        if(this.body.velocity.x != 0 && this.body.velocity.y != 0){
+            this.aux = Math.sqrt(this.body.velocity.x * this.body.velocity.x + this.body.velocity.y * this.body.velocity.y);
+            this.body.velocity.x /= this.aux;
+            this.body.velocity.x *= this.speed;
+            this.body.velocity.y /= this.aux;
+            this.body.velocity.y *= this.speed;
+        }
     
     //this.game.debug.text(this.frame, 100, 200, 'DDDDDD');
     
     // No va, es queda bloquejat al roll
-    if(this.xKey.isDown && this.xKey.downDuration(1) && this.canRoll) {
-        this.rolling();
+        if(this.xKey.isDown && this.xKey.downDuration(1) && this.canRoll) {
+            this.rolling();
         //this.rolling();
+        }
+        gameOptions.playerPosY = this.body.position.y;
     }
 
-    gameOptions.playerPosY = this.body.position.y;
+    
 
     //Debug elements
     //this.game.debug.body(this);
@@ -87,7 +96,7 @@ shooter1942.playerPrefab.prototype.update = function(){
 shooter1942.playerPrefab.prototype.idle = function() {
     this.animations.play('idle');
     gameOptions.immunity = false;
-    console.log('Finished Roll\nVulnerable');
+    //console.log('Finished Roll\nVulnerable');
     this.canRoll = true;
 };
 shooter1942.playerPrefab.prototype.rolling = function() {
@@ -97,7 +106,7 @@ shooter1942.playerPrefab.prototype.rolling = function() {
         this.canRoll = false;
         gameOptions.rolls--;
         this.animations.play('roll');
-        console.log('Immune');
+        //console.log('Immune');
         this.game.time.events.add(Phaser.Timer.SECOND*1.5, this.idle,this);
     }
 };

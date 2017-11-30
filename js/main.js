@@ -17,8 +17,7 @@ var gameOptions = {
     bullet_playerSpeed: -400,
     bullet_enemySpeed: 200,
     immunity:       false,
-    cameFromMenu:   false,
-    playerCanShoot: true
+    cameFromMenu:   false
 };
 
 shooter1942.game = new Phaser.Game(gameOptions.gameWidth, gameOptions.gameHeight, Phaser.AUTO,null,this,false,false);
