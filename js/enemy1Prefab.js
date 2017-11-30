@@ -8,7 +8,7 @@ shooter1942.enemy1Prefab = function(game, x, y){
     this.anchor.setTo(.5);
     this.game.physics.arcade.enable(this);
     this.checkWorldBounds = true;
-    this.outOfBoundsKill = true;    
+    //this.outOfBoundsKill = true;    
     this.hitsLeft = 1;
     this.enemyType = 1;
     this.shoot = true;
@@ -23,6 +23,8 @@ shooter1942.enemy1Prefab = function(game, x, y){
     //------------------VELOCITY-------------------------
     this.body.velocity.x = this.direction_x * gameOptions.enemy1Speed;
     this.body.velocity.y = this.direction_y * gameOptions.enemy1Speed;
+    
+    this.game.debug.body(this);
 };
 
 shooter1942.enemy1Prefab.prototype = Object.create(Phaser.Sprite.prototype);
@@ -41,6 +43,6 @@ shooter1942.enemy1Prefab.prototype.update = function() {
         this.animations.play('E_flip');
         this.body.velocity.y = -this.direction_y * gameOptions.enemy1Speed;
         this.shoot = true;
-        
+        this.outOfBoundsKill = true;
     }
 }

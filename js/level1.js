@@ -90,13 +90,13 @@ shooter1942.level1 = {
         this.loadBulletsEnemy();
         //Enemies
         this.loadEnemy();
-        this.enemy1Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 8, this.createEnemy1, this);
-        this.enemy2Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 24, this.createEnemy2, this);
-        this.enemy1Timer2 = this.game.time.events.loop(Phaser.Timer.SECOND * 32, this.createEnemy1, this);
-        this.enemy2Timer2 = this.game.time.events.loop(Phaser.Timer.SECOND * 40, this.createEnemy2, this);
+        this.enemy1Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 6, this.createEnemy1, this);
+        this.enemy2Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 12, this.createEnemy2, this);
+        this.enemy1Timer2 = this.game.time.events.loop(Phaser.Timer.SECOND * 24, this.createEnemy1, this);
+        this.enemy2Timer2 = this.game.time.events.loop(Phaser.Timer.SECOND * 30, this.createEnemy2, this);
         //PowerUps
         this.loadpUp();
-        this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 60, this.createpUp, this);
+        this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 40, this.createpUp, this);
         //Explosiosn
         this.loadExplosions();
         
@@ -209,9 +209,10 @@ shooter1942.level1 = {
         //if (!enemy) 
         //{
         for(var i = 0; i < 4; i++){
-            var enemy = new shooter1942.enemy1Prefab(this.game, this.rnd.integerInRange(16,this.world.width -16), 1);
+            var enemy = new shooter1942.enemy1Prefab(this.game, this.rnd.integerInRange(16,this.world.width -16), -i * 64);
             this.enemies.add(enemy);
         }
+        
         //}
         //else
         //{
@@ -273,8 +274,10 @@ shooter1942.level1 = {
             switch (enemy.enemyType) {
                 case 1:
                     gameOptions.score += 50;
+                    break;
                 case 2:
                     gameOptions.score += 1000;
+                    break;
                 default: 
                     break;
 
