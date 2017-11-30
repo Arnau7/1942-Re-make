@@ -96,7 +96,7 @@ shooter1942.level1 = {
         this.enemy2Timer2 = this.game.time.events.loop(Phaser.Timer.SECOND * 40, this.createEnemy2, this);
         //PowerUps
         this.loadpUp();
-        this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 60, this.createpUp, this);
+        this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 32, this.createpUp, this);
         //Explosiosn
         this.loadExplosions();
         
@@ -273,8 +273,10 @@ shooter1942.level1 = {
             switch (enemy.enemyType) {
                 case 1:
                     gameOptions.score += 50;
+                    break;
                 case 2:
                     gameOptions.score += 1000;
+                    break;
                 default: 
                     break;
 
