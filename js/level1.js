@@ -96,11 +96,8 @@ shooter1942.level1 = {
         this.enemy2Timer2 = this.game.time.events.loop(Phaser.Timer.SECOND * 30, this.createEnemy2, this);
         //PowerUps
         this.loadpUp();
-<<<<<<< HEAD
         this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 40, this.createpUp, this);
-=======
-        this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 2, this.createpUp, this);
->>>>>>> origin/master
+
         //Explosiosn
         this.loadExplosions();
         
