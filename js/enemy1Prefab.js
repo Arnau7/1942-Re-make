@@ -24,7 +24,6 @@ shooter1942.enemy1Prefab = function(game, x, y){
     this.body.velocity.x = this.direction_x * gameOptions.enemy1Speed;
     this.body.velocity.y = this.direction_y * gameOptions.enemy1Speed;
     
-    this.game.debug.body(this);
 };
 
 shooter1942.enemy1Prefab.prototype = Object.create(Phaser.Sprite.prototype);
@@ -33,7 +32,7 @@ shooter1942.enemy1Prefab.prototype.constructor = shooter1942.enemy1Prefab;
 shooter1942.enemy1Prefab.prototype.update = function() {
 //    if(this.body.position.y == 50)
 //        shooter1942.level1.createBulletEnemy(this);
-    if(this.shoot && !gameOptions.playerRespawning){
+    if(this.shoot && !gameOptions.playerRespawning && this.alive){
         if(this.body.position.y >= gameOptions.playerPosY - 150 && this.body.position.y <= gameOptions.playerPosY - 140){
             shooter1942.level1.createBulletEnemy(this);
             this.shoot = false;

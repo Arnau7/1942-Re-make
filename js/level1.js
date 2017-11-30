@@ -247,7 +247,7 @@ shooter1942.level1 = {
                 this.camera.shake(0.05,125);
                 this.createExplosion(player.position.x, player.position.y);
                 //this.explosions.scale.setTo(4);
-                enemy.kill();
+                enemy.destroy();
                 gameOptions.lives--;
 
                 switch (enemy.enemyType) {
