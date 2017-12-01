@@ -87,10 +87,12 @@ shooter1942.level2 = {
         this.loadBulletsEnemy();
         //Enemies
         this.loadEnemy();
-        this.enemy1Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 6, this.createEnemy1, this);
-        this.enemy2Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 12, this.createEnemy2, this);
-        this.enemy1Timer2 = this.game.time.events.loop(Phaser.Timer.SECOND * 24, this.createEnemy1, this);
-        this.enemy2Timer2 = this.game.time.events.loop(Phaser.Timer.SECOND * 30, this.createEnemy2, this);
+        //this.enemy1Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 6, this.createEnemy1, this);
+        //this.enemy2Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 12, this.createEnemy2, this);
+        //this.enemy1Timer2 = this.game.time.events.loop(Phaser.Timer.SECOND * 24, this.createEnemy1, this);
+        //this.enemy2Timer2 = this.game.time.events.loop(Phaser.Timer.SECOND * 30, this.createEnemy2, this);
+        this.createEnemy3 = this.game.time.events.loop(Phaser.Timer.SECOND * 2, this.createEnemy3, this);
+        
         //PowerUps
         this.loadpUp();
         this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 40, this.createpUp, this);
@@ -100,7 +102,6 @@ shooter1942.level2 = {
         
         //Add the player
         this.createPlayer();
- 
         
         gameOptions.backgroundSpeed = 0.8;
         // Physics
@@ -235,7 +236,11 @@ shooter1942.level2 = {
         
         this.enemies.add(enemy);
     },
-    
+    createEnemy3:function(){
+        var enemy = new shooter1942.enemy3Prefab(this.game,this.rnd.integerInRange(16,this.world.width/2),gameOptions.gameHeight);
+        
+        this.enemies.add(enemy);
+    },
     enemyCrash:function(player,enemy){
         if(!gameOptions.immunity){
             if(enemy.hitsLeft == 1) {
@@ -285,9 +290,11 @@ shooter1942.level2 = {
                 case 2:
                     gameOptions.score += 1000;
                     break;
+                case 3:
+                    gameOptions.score += 2000 + 200 * gameOptions.enemy3Killed;
+                    gameOptions.enemy3Killed++;
                 default: 
                     break;
-
             }
         }
         
