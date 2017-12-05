@@ -11,6 +11,7 @@ shooter1942.level2 = {
         this.load.spritesheet('playerRoll', 'img/P_roll.png', 34, 27);
         this.load.spritesheet('enemy1', 'img/E_01.png', 17, 16);       //Enemy1
         this.load.spritesheet('enemy2', 'img/E_02.png', 33, 29);            //Enemy2
+        this.load.spritesheet('enemy3', 'img/E_03.png', 65, 50);        
         this.load.spritesheet('explosion','img/enemy_kill.png',19,17);      //Enemy death
         this.load.image('double_bullet','img/double_bullet.png');           //Doble Bala
         this.load.image('rolls', 'img/pUp_extraLife.png');                  

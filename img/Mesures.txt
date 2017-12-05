@@ -18,3 +18,5 @@ roll_Icon: 21 x 26 px
 
 
 E_02: 330 x 29 px / 10 sprites = 33 x 29 px
+
+E_03: 455 x 100 px / 7 columnes, 2 files = 65 x 50 px
