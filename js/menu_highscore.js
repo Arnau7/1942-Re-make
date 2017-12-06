@@ -50,15 +50,15 @@ shooter1942.menu_highscore = {
             if(gameOptions.accuracy < 40)
                 this.accuracyText.fill = '#ff4d4d';     //RED
             else if(gameOptions.accuracy >= 40 && gameOptions.accuracy < 60)
-                this.accuracyText.fill = '#ffb84d';      //ORANGE
+                this.accuracyText.fill = '#ffb84d';     //ORANGE
             else if(gameOptions.accuracy >= 60 && gameOptions.accuracy < 80)
-                this.accuracyText.fill = '#66ff66';  //GREEN
+                this.accuracyText.fill = '#66ff66';     //GREEN
             else if(gameOptions.accuracy >= 80 && gameOptions.accuracy < 90)
                 this.accuracyText.fill = '#00FFFF';     //BLUE
             else if(gameOptions.accuracy >= 90 && gameOptions.accuracy < 98)
                 this.accuracyText.fill = '#cc99ff';     //PURPLE
             else if(gameOptions.accuracy >= 98)
-                this.accuracyText.fill = '#ffff66';      //YELLOW
+                this.accuracyText.fill = '#ffff66';     //YELLOW
             
             this.accuracyText.fontSize = 20;
         }

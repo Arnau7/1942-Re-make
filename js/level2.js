@@ -202,7 +202,7 @@ shooter1942.level2 = {
             console.log('Player killed');
             this.sound_playerDeath.play();
             this.camera.shake(0.05,250);
-            this.createExplosion(this.player.position.x, this.player.position.y);
+            this.createExplosion(this.player.position.x, this.player.position.y, 1);
             bulletEnemy.kill();
             gameOptions.lives--; 
             this.resetLevel();
@@ -254,7 +254,7 @@ shooter1942.level2 = {
                 console.log('Enemy Crash')
                 this.sound_playerDeath.play();
                 this.camera.shake(0.05,125);
-                this.createExplosion(player.position.x, player.position.y);
+                this.createExplosion(player.position.x, player.position.y, 1);
                 //this.explosions.scale.setTo(4);
                 enemy.destroy();
                 gameOptions.lives--;
@@ -275,9 +275,9 @@ shooter1942.level2 = {
             
             else {
                 enemy.hitsLeft--;
-                 this.sound_playerDeath.play();
+                this.sound_playerDeath.play();
                 this.camera.shake(0.05,250);
-                this.createExplosion(player.position.x, player.position.y);
+                this.createExplosion(player.position.x, player.position.y, 1);
                 gameOptions.lives--;
                 this.resetLevel();
             }
@@ -287,17 +287,19 @@ shooter1942.level2 = {
         if (enemy.hitsLeft == 1) {
             console.log('Enemy killed');
             this.sound_enemyDeath.play();
-            this.createExplosion(enemy.position.x, enemy.position.y);
             bullet.kill();
             enemy.kill();
             switch (enemy.enemyType) {
                 case 1:
+                    this.createExplosion(enemy.position.x, enemy.position.y, 2);
                     gameOptions.score += 50;
                     break;
                 case 2:
+                    this.createExplosion(enemy.position.x, enemy.position.y, 2);
                     gameOptions.score += 1000;
                     break;
                 case 3:
+                    this.createExplosion(enemy.position.x, enemy.position.y, 3);
                     gameOptions.score += 2000 + 200 * gameOptions.enemy3Killed;
                     gameOptions.enemy3Killed++;
                 default: 
@@ -308,6 +310,7 @@ shooter1942.level2 = {
         else {
             enemy.hitsLeft--;
             this.sound_enemyDeath.play();
+            this.createExplosion(enemy.position.x, enemy.position.y, 2);
             bullet.kill();
             gameOptions.score += 100;
 

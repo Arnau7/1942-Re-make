@@ -183,11 +183,13 @@ shooter1942.level1 = {
         this.rollsText.setText(gameOptions.rolls);
         this.scoreText.setText(gameOptions.score);
         
-        //DEVELOPER BUTTONS
+        //DEVELOPER BUTTONS (change to false in main.js to disable or true to enable)
         if(gameOptions.developer){
-            if(this.l.isDown && this.l.downDuration(1) && gameOptions.lives < 50) //EXTRA LIVE WITH "L"
+            if(this.l.isDown && this.l.downDuration(1) && gameOptions.lives < 50) 
+                //EXTRA LIFE WITH "L"
                 gameOptions.lives++;
-            if(this.r.isDown && this.r.downDuration(1) && gameOptions.rolls < 50) //EXTRA ROLL WITH "R"
+            if(this.r.isDown && this.r.downDuration(1) && gameOptions.rolls < 50)  
+                //EXTRA ROLL WITH "R"
                 gameOptions.rolls++;
         }
     },
@@ -217,7 +219,7 @@ shooter1942.level1 = {
             //console.log('Player killed');
             this.sound_playerDeath.play();
             this.camera.shake(0.05,250);
-            this.createExplosion(this.player.position.x, this.player.position.y);
+            this.createExplosion(this.player.position.x, this.player.position.y, 1);
             bulletEnemy.kill();
             gameOptions.lives--; 
             this.resetLevel();
@@ -265,7 +267,7 @@ shooter1942.level1 = {
                 //console.log('Enemy Crash')
                 this.sound_playerDeath.play();
                 this.camera.shake(0.05,125);
-                this.createExplosion(player.position.x, player.position.y);
+                this.createExplosion(player.position.x, player.position.y, 1);
                 //this.explosions.scale.setTo(4);
                 enemy.destroy();
                 gameOptions.lives--;
@@ -288,7 +290,7 @@ shooter1942.level1 = {
                 enemy.hitsLeft--;
                  this.sound_playerDeath.play();
                 this.camera.shake(0.05,250);
-                this.createExplosion(player.position.x, player.position.y);
+                this.createExplosion(player.position.x, player.position.y, 1);
                 gameOptions.lives--;
                 this.resetLevel();
             }
@@ -298,7 +300,7 @@ shooter1942.level1 = {
         if (enemy.hitsLeft == 1) {
             //console.log('Enemy killed');
             this.sound_enemyDeath.play();
-            this.createExplosion(enemy.position.x, enemy.position.y);
+            this.createExplosion(enemy.position.x, enemy.position.y, 2);
             bullet.kill();
             enemy.kill();
             gameOptions.totalEnemiesKilled++;
@@ -316,7 +318,7 @@ shooter1942.level1 = {
         }
         
         else {
-            this.createExplosion(enemy.position.x, enemy.position.y);
+            this.createExplosion(enemy.position.x, enemy.position.y, 2);
             enemy.hitsLeft--;
             this.sound_enemyDeath.play();
             bullet.kill();
@@ -423,16 +425,24 @@ shooter1942.level1 = {
     loadExplosions:function(){
         this.explosions = this.add.group();
     },
-    createExplosion:function(_x, _y){
+    createExplosion:function(_x, _y, type){
         var explosion = this.explosions.getFirstExists(false);
         if(!explosion){
-            explosion = new shooter1942.explosionPrefab(this.game,_x, _y);
+            explosion = new shooter1942.explosionPrefab(this.game,_x, _y, type);
             this.explosions.add(explosion);
         }
         else{
             explosion.reset(_x,_y);
         }
-        explosion.animations.play('explode',10,false,true);
+        if(type == 1){
+            explosion.animations.play('explode',10,false,true);
+        }
+        else if(type == 2){
+            explosion.animations.play('explode',10,false,true);
+        }
+        else if(type == 3){
+            explosion.animations.play('explode',10,false,true);
+        }
     },
 
     //---------------LEVEL FUNCTIONS------------------------
