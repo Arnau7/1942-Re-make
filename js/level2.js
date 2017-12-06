@@ -13,7 +13,7 @@ shooter1942.level2 = {
         this.load.spritesheet('enemy2', 'img/E_02.png', 33, 29);            //Enemy2
         this.load.spritesheet('enemy3', 'img/E_03.png', 65, 50);        
         this.load.spritesheet('explosion','img/enemy_kill.png',19,17);      //Enemy 1/2death
-        this.load.spritesheet('explosion3', 'img/E_03.png');
+        this.load.spritesheet('explosions', 'img/explosions.png',65,50);
         this.load.image('double_bullet','img/double_bullet.png');           //Doble Bala
         this.load.image('rolls', 'img/pUp_extraLife.png');                  
         this.load.image('lives', 'img/P_left.png');
@@ -162,11 +162,6 @@ shooter1942.level2 = {
             console.log('rolling');
             this.player.rolls -= 1;
         }*/
-        
-        //HUD
-        this.livesText.setText(gameOptions.lives);
-        this.rollsText.setText(gameOptions.rolls);
-        this.scoreText.setText(gameOptions.score);
     
        //Bala del player ha donat a un enemic 
         this.game.physics.arcade.overlap(this.enemies,this.bullets,this.enemyGotHit,null,this);
@@ -176,6 +171,11 @@ shooter1942.level2 = {
         this.game.physics.arcade.overlap(this.player,this.enemies,this.enemyCrash, null,this);
         //Bala de l'enemic ha donat al player
         this.game.physics.arcade.overlap(this.player, this.bulletsEnemy, this.playerGotHit, null,this);
+        
+        //HUD
+        this.livesText.setText(gameOptions.lives);
+        this.rollsText.setText(gameOptions.rolls);
+        this.scoreText.setText(gameOptions.score);
     },
     
 
@@ -482,7 +482,7 @@ shooter1942.level2 = {
             explosion.reset(_x,_y);
         }
         if(type == 1){
-            explosion.animations.play('explode',10,false,true);
+            explosion.animations.play('explodePlayer',10,false,true);
         }
         else if(type == 2){
             explosion.animations.play('explode',10,false,true);

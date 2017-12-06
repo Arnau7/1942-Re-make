@@ -1,15 +1,14 @@
 var shooter1942 = shooter1942 || {};
 
 shooter1942.explosionPrefab = function(game,x,y,size, type){
-    Phaser.Sprite.call(this,game,x,y,'explosion');
+    Phaser.Sprite.call(this,game,x,y,'explosions');
     this.animations.add('explode', [0,1,2,3,4,5], 10, false);
+    this.animations.add('explodePlayer',[6,7,8,9,10,11], 10, false);
+    this.animations.add('explode3', [12,13,14,15,16,17,18,19,20,21,22], 10, false);
     this.anchor.setTo(.5);
     this.scale.setTo(1);
 
-    Phaser.Sprite.call(this,game,x,y,'explosion3');
-    this.animation.add('explode3', [2,3,4,5,6,7,8,9,10,11,12],10,false);
-    this.anchor.setTo(.5);
-    this.scale.setTo(1);
+    
 
     //TYPE 1 = PLAYER EXPLOSION
     //TYPE 2 = ENEMY 1/2 EXPLOSION

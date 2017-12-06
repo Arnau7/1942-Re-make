@@ -53,7 +53,7 @@ shooter1942.enemy1Prefab.prototype.update = function() {
             this.shoot = false;
         }
     }
-    if(this.body.position.y >= gameOptions.playerPosY - 30)
+    if(this.body.position.y >= gameOptions.playerPosY - 10)
     {
         this.animations.play('E_flip');
         this.body.velocity.y = -this.direction_y * gameOptions.enemy1Speed;
