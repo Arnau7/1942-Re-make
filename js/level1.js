@@ -33,6 +33,9 @@ shooter1942.level1 = {
         this.escape = this.game.input.keyboard.addKey(Phaser.Keyboard.ESC);
         this.z = this.game.input.keyboard.addKey(Phaser.Keyboard.Z);
         
+        this.l = this.game.input.keyboard.addKey(Phaser.Keyboard.L);
+        this.r = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
+        
         //SOUND
         this.load.audio('theme', 'sound/stage_theme.mp3');
         //this.music = new Phaser.Sound(this.game, 'theme', 1, true);
@@ -144,9 +147,11 @@ shooter1942.level1 = {
         // Fer correr el fons, velocitat a GameOptions per tenir-ho generalitzat als 3 nivells
         this.fons.position.y += gameOptions.backgroundSpeed;
         
+        //GAME OVER CONDITION
         // Si la posició del punt anclatge es mes gran a la mida del tile + finestra, atura d'avançar (final de nivell)
         if (this.fons.position.y >= 3072 +gameOptions.gameHeight * 2) {
             gameOptions.backgroundSpeed = 0;
+            this.enemiesKilledRating();
             this.soundtrack.stop();
             this.music_cleared.play();
             this.state.start('menu_highscore');
@@ -154,7 +159,7 @@ shooter1942.level1 = {
         
         // Simple debug per anar coneixent la posició del fons, alomillor mes endevant podem fer un upgrade
         // i fer una barra de progrés (Ho deix com a proposta) de que te queda de nivell
-        this.game.debug.text('Posició Y del fons: ' + this.fons.position.y, 5, 15, 'DDDDDD');
+        this.game.debug.text('Posició Y del fons: ' + Math.trunc(this.fons.position.y), 5, 15, 'DDDDDD');
         
         // Player roll
         /*if (this.space.isDown && this.space.downDuration(1) && this.player.rolls > 0) {
@@ -163,10 +168,6 @@ shooter1942.level1 = {
             this.player.rolls -= 1;
         }*/
         
-        //HUD
-        this.livesText.setText(gameOptions.lives);
-        this.rollsText.setText(gameOptions.rolls);
-        this.scoreText.setText(gameOptions.score);
     
        //Bala del player ha donat a un enemic 
         this.game.physics.arcade.overlap(this.enemies,this.bullets,this.enemyGotHit,null,this);
@@ -176,6 +177,19 @@ shooter1942.level1 = {
         this.game.physics.arcade.overlap(this.player,this.enemies,this.enemyCrash, null,this);
         //Bala de l'enemic ha donat al player
         this.game.physics.arcade.overlap(this.player, this.bulletsEnemy, this.playerGotHit, null,this);
+        
+        //HUD
+        this.livesText.setText(gameOptions.lives);
+        this.rollsText.setText(gameOptions.rolls);
+        this.scoreText.setText(gameOptions.score);
+        
+        //DEVELOPER BUTTONS
+        if(gameOptions.developer){
+            if(this.l.isDown && this.l.downDuration(1) && gameOptions.lives < 50) //EXTRA LIVE WITH "L"
+                gameOptions.lives++;
+            if(this.r.isDown && this.r.downDuration(1) && gameOptions.rolls < 50) //EXTRA ROLL WITH "R"
+                gameOptions.rolls++;
+        }
     },
     
 
@@ -200,7 +214,7 @@ shooter1942.level1 = {
     },
     playerGotHit:function(player, bulletEnemy){
         if(!gameOptions.immunity){
-            console.log('Player killed');
+            //console.log('Player killed');
             this.sound_playerDeath.play();
             this.camera.shake(0.05,250);
             this.createExplosion(this.player.position.x, this.player.position.y);
@@ -225,7 +239,7 @@ shooter1942.level1 = {
         //if (!enemy) 
         //{
         for(var i = 0; i < 4; i++){
-            var enemy = new shooter1942.enemy1Prefab(this.game, this.rnd.integerInRange(16,this.world.width -16), -i * 64);
+            var enemy = new shooter1942.enemy1Prefab(this.game, this.rnd.integerInRange(16,this.world.width -16), -i * 64, 1);
             this.enemies.add(enemy);
         }
         
@@ -240,7 +254,7 @@ shooter1942.level1 = {
         //this.createBulletEnemy(enemy);
     },
     createEnemy2:function(){
-        var enemy = new shooter1942.enemy2Prefab(this.game, this.rnd.integerInRange(16,this.world.width/2), 1);
+        var enemy = new shooter1942.enemy2Prefab(this.game, this.rnd.integerInRange(16,this.world.width/2), 1, 1);
         
         this.enemies.add(enemy);
     },
@@ -248,14 +262,14 @@ shooter1942.level1 = {
     enemyCrash:function(player,enemy){
         if(!gameOptions.immunity){
             if(enemy.hitsLeft == 1) {
-                console.log('Enemy Crash')
+                //console.log('Enemy Crash')
                 this.sound_playerDeath.play();
                 this.camera.shake(0.05,125);
                 this.createExplosion(player.position.x, player.position.y);
                 //this.explosions.scale.setTo(4);
                 enemy.destroy();
                 gameOptions.lives--;
-
+                gameOptions.totalEnemiesKilled++;
                 switch (enemy.enemyType) {
                     case 1:
                         gameOptions.score += 50;
@@ -282,11 +296,12 @@ shooter1942.level1 = {
     },
     enemyGotHit:function(enemy, bullet){
         if (enemy.hitsLeft == 1) {
-            console.log('Enemy killed');
+            //console.log('Enemy killed');
             this.sound_enemyDeath.play();
             this.createExplosion(enemy.position.x, enemy.position.y);
             bullet.kill();
             enemy.kill();
+            gameOptions.totalEnemiesKilled++;
             switch (enemy.enemyType) {
                 case 1:
                     gameOptions.score += 50;
@@ -420,9 +435,14 @@ shooter1942.level1 = {
         explosion.animations.play('explode',10,false,true);
     },
 
-
     //---------------LEVEL FUNCTIONS------------------------
-    
+    enemiesKilledRating:function(){
+        gameOptions.accuracy = (gameOptions.totalEnemiesKilled / this.enemies.length)*100;
+        gameOptions.accuracy = Math.round(gameOptions.accuracy);
+        console.log("Enemies created: "+this.enemies.length);
+        console.log("Enemies killed: "+gameOptions.totalEnemiesKilled);
+        console.log("Rating: "+gameOptions.accuracy);
+    },
     resetLevel:function(){
         //this.player.kill();
         gameOptions.immunity = true;

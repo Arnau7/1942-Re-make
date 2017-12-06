@@ -6,7 +6,7 @@ var maxId = 2;
 shooter1942.menu = {
     preload:function(){
         this.load.image('title','img/title.jpg');
-        this.load.image('playButton','img/button_play.png');
+        //this.load.image('playButton','img/button_play.png');
         
          //KEYS
         this.cursors = this.game.input.keyboard.createCursorKeys();

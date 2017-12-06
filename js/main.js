@@ -11,16 +11,19 @@ var gameOptions = {
     rolls:              3,
     score:              0,
     backgroundSpeed:    0,
-    enemy1Speed:        110,
-    enemy1BulletSpeed:  200,
+    enemy1Speed:        130,
+    enemy1BulletSpeed:  180,
     enemy2Speed:        100,
-    enemy3Speed:        50,
+    enemy3Speed:        -50,
     bullet_playerSpeed: -400,
     bullet_enemySpeed:  200,
     immunity:           false,
     cameFromMenu:       false,
     playerRespawning:   false,
-    enemy3Killed:       0
+    enemy3Killed:       0,
+    totalEnemiesKilled: 0,
+    accuracy:           0,
+    developer:          true
 };
 
 shooter1942.game = new Phaser.Game(gameOptions.gameWidth, gameOptions.gameHeight, Phaser.AUTO,null,this,false,false);

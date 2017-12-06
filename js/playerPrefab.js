@@ -3,7 +3,7 @@ var shooter1942 = shooter1942 || {};
 shooter1942.playerPrefab = function(game, x, y, speed) {
     Phaser.Sprite.call(this, game,x,y, 'playerSprite');
     this.anchor.setTo(.5);
-    this.scale.setTo(2);
+    this.scale.setTo(1.5);
     this.game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
     //this.checkWorldBounds = true;
@@ -37,13 +37,13 @@ shooter1942.playerPrefab.prototype.constructor = shooter1942.playerPrefab;
 shooter1942.playerPrefab.prototype.update = function(){
     //this.animations.play('idle');
 
-     if(gameOptions.playerRespawning){
+    if(gameOptions.playerRespawning)
+    {
         //console.log('respawning: ' + this.respawning);
         this.frame = 4;
     }
     else
     {
-    
         if (this.cursors.left.isDown) {
             this.body.velocity.x = -this.speed;
             if(this.canRoll)
@@ -80,7 +80,6 @@ shooter1942.playerPrefab.prototype.update = function(){
     
     //this.game.debug.text(this.frame, 100, 200, 'DDDDDD');
     
-    // No va, es queda bloquejat al roll
         if(this.xKey.isDown && this.xKey.downDuration(1) && this.canRoll) {
             this.rolling();
         //this.rolling();
@@ -101,7 +100,7 @@ shooter1942.playerPrefab.prototype.idle = function() {
     this.canRoll = true;
 };
 shooter1942.playerPrefab.prototype.rolling = function() {
-    if(gameOptions.rolls > 0){
+    if(gameOptions.rolls > 0 && !gameOptions.immunity){
         this.game.sound_roll.play();
         gameOptions.immunity = true;
         this.canRoll = false;

@@ -47,7 +47,7 @@ shooter1942.level2 = {
     create:function(){
         this.buttonSelect = this.add.audio('select');
         // Crear un objecte fons, per poder canviar-li les variables i pintar-ho
-        this.fons = this.game.add.tileSprite(0, 0, gameOptions.gameWidth, 2048, 'bg2');
+        this.fons = this.game.add.tileSprite(0, 0, gameOptions.gameWidth, 3072, 'bg2');
         this.fons.scale.y = 1.5; // S'escala a 1'5 perque l'sprite és petit. 
         this.fons.scale.x = 1.5; // Està calculat que en X, si s'escala en 1'5 dona un numero exacte, que es el width de la finestra
         this.fons.anchor.y = 0.89; // Aquest anchor en Y situa el punt d'anclatgef de l'imatge al punt exacte d'abaix, per poder correr cap adalt        
@@ -92,7 +92,7 @@ shooter1942.level2 = {
         //this.enemy2Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 12, this.createEnemy2, this);
         //this.enemy1Timer2 = this.game.time.events.loop(Phaser.Timer.SECOND * 24, this.createEnemy1, this);
         //this.enemy2Timer2 = this.game.time.events.loop(Phaser.Timer.SECOND * 30, this.createEnemy2, this);
-        this.createEnemy3 = this.game.time.events.loop(Phaser.Timer.SECOND * 2, this.createEnemy3, this);
+        this.createEnemy3 = this.game.time.events.add(Phaser.Timer.SECOND * 2, this.createEnemy3, this);
         
         //PowerUps
         this.loadpUp();
@@ -116,7 +116,7 @@ shooter1942.level2 = {
         this.sound_shoot = this.add.audio('shoot');
         this.sound_enemyDeath = this.add.audio('enemyDeath');
         
-        //this.modulus();
+        //Important bools to reset in a new level
         gameOptions.playerRespawning = false;
         gameOptions.immunity = false;
     },
@@ -189,6 +189,12 @@ shooter1942.level2 = {
         this.player.position.x = gameOptions.gameWidth/2;
         this.player.position.y = gameOptions.gameHeight - 100;
         gameOptions.playerRespawning = false;
+        this.player.tint = 0x444444;
+        this.game.time.events.add(Phaser.Timer.SECOND*2, this.playerImmunity,this);
+        
+    },
+    playerImmunity:function(){
+        this.player.tint = 0xffffff;
         gameOptions.immunity = false;
     },
     playerGotHit:function(player, bulletEnemy){
@@ -218,7 +224,7 @@ shooter1942.level2 = {
         //if (!enemy) 
         //{
         for(var i = 0; i < 4; i++){
-            var enemy = new shooter1942.enemy1Prefab(this.game, this.rnd.integerInRange(16,this.world.width -16), -i * 64);
+            var enemy = new shooter1942.enemy1Prefab(this.game, this.rnd.integerInRange(16,this.world.width -16), -i * 64, 2);
             this.enemies.add(enemy);
         }
         
@@ -233,12 +239,12 @@ shooter1942.level2 = {
         //this.createBulletEnemy(enemy);
     },
     createEnemy2:function(){
-        var enemy = new shooter1942.enemy2Prefab(this.game, this.rnd.integerInRange(16,this.world.width/2), 1);
+        var enemy = new shooter1942.enemy2Prefab(this.game, this.rnd.integerInRange(16,this.world.width/2), 1, 2);
         
         this.enemies.add(enemy);
     },
     createEnemy3:function(){
-        var enemy = new shooter1942.enemy3Prefab(this.game,this.rnd.integerInRange(16,this.world.width/2),gameOptions.gameHeight);
+        var enemy = new shooter1942.enemy3Prefab(this.game,this.rnd.integerInRange(65,this.world.width-65),gameOptions.gameHeight, 2);
         
         this.enemies.add(enemy);
     },
@@ -399,6 +405,62 @@ shooter1942.level2 = {
         bulletEnemy.body.velocity.x = this.dir_x * gameOptions.enemy1BulletSpeed;
         bulletEnemy.body.velocity.y = this.dir_y * gameOptions.enemy1BulletSpeed;
         //bulletEnemy.body.velocity.y = gameOptions.bullet_enemySpeed;
+    },
+    createBulletEnemyCone:function(enemy){
+        for(var i = 0; i < 3; i++)
+        {
+            /*var bulletEnemy = this.bulletsEnemy.getFirstExists(false);
+            if(!bulletEnemy)
+            {*/
+                if(i == 0)
+                {
+                    var bulletEnemy = new shooter1942.bulletEnemyPrefab(this.game, enemy.x, enemy.bottom);
+                    this.bulletsEnemy.add(bulletEnemy);
+                    
+                    this.dir_x = (this.player.body.position.x-50 - enemy.body.position.x);
+                    this.dir_y = (this.player.body.position.y-50 - enemy.body.position.y);
+                    this.dir_mod = Math.sqrt(this.dir_x * this.dir_x + this.dir_y * this.dir_y);
+                    this.dir_x /= this.dir_mod;
+                    this.dir_y /= this.dir_mod;
+        
+                    bulletEnemy.body.velocity.x = this.dir_x * gameOptions.enemy1BulletSpeed;
+                    bulletEnemy.body.velocity.y = this.dir_y * gameOptions.enemy1BulletSpeed;
+                }
+                else if(i == 1){
+                    var bulletEnemy = new shooter1942.bulletEnemyPrefab(this.game, enemy.x, enemy.bottom);
+                    this.bulletsEnemy.add(bulletEnemy);
+                    
+                    this.dir_x = (this.player.body.position.x - enemy.body.position.x);
+                    this.dir_y = (this.player.body.position.y - enemy.body.position.y);
+                    this.dir_mod = Math.sqrt(this.dir_x * this.dir_x + this.dir_y * this.dir_y);
+                    this.dir_x /= this.dir_mod;
+                    this.dir_y /= this.dir_mod;
+        
+                    bulletEnemy.body.velocity.x = this.dir_x * gameOptions.enemy1BulletSpeed;
+                    bulletEnemy.body.velocity.y = this.dir_y * gameOptions.enemy1BulletSpeed;
+                    bulletEnemy.body.velocity.y = this.dir_y * gameOptions.enemy1BulletSpeed;
+                }
+                else if(i == 2)
+                {
+                    var bulletEnemy = new shooter1942.bulletEnemyPrefab(this.game, enemy.x, enemy.bottom);
+                    this.bulletsEnemy.add(bulletEnemy);
+                    
+                    this.dir_x = (this.player.body.position.x+50 - enemy.body.position.x);
+                    this.dir_y = (this.player.body.position.y+50 - enemy.body.position.y);
+                    this.dir_mod = Math.sqrt(this.dir_x * this.dir_x + this.dir_y * this.dir_y);
+                    this.dir_x /= this.dir_mod;
+                    this.dir_y /= this.dir_mod;
+        
+                    bulletEnemy.body.velocity.x = this.dir_x * gameOptions.enemy1BulletSpeed;
+                    bulletEnemy.body.velocity.y = this.dir_y * gameOptions.enemy1BulletSpeed;
+                }
+            }
+          /*  else
+            {
+                bulletEnemy.reset(enemy.x, enemy.y);
+            }*/
+       // }
+        
     },
 
     //---------------EXPLOSIONS-----------------------------

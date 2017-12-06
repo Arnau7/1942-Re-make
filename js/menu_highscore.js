@@ -24,7 +24,7 @@ shooter1942.menu_highscore = {
         this.rankingText.fill = 'white';
         this.rankingText.fontSize = 30;
         //Value
-        this.scoreText = this.game.add.text(30, gameOptions.gameHeight/5, 'YOUR SCORE:                      '+gameOptions.score);
+        this.scoreText = this.game.add.text(30, gameOptions.gameHeight/2.5, 'YOUR SCORE:                      '+gameOptions.score);
         this.scoreText.anchor.setTo(0);
         this.scoreText.font = 'Press Start 2P';
         this.scoreText.fill = 'yellow';
@@ -41,6 +41,26 @@ shooter1942.menu_highscore = {
             this.returnText = this.game.add.text(gameOptions.gameWidth/2, gameOptions.gameHeight/1.1, 'Press SPACEBAR to continue\nPress ESC to return');
             this.finalText = this.game.add.text(gameOptions.gameWidth/2, gameOptions.gameHeight/6.25, 'LEVEL COMPLETED');
             this.finalText.fill = 'lightblue';
+    
+            this.accuracyText = this.game.add.text(gameOptions.gameWidth/2, gameOptions.gameHeight/4.8, gameOptions.accuracy + "%");
+            this.accuracyText.anchor.setTo(.5);
+            this.accuracyText.font = 'Press Start 2P';
+            
+            //Text colour according to score
+            if(gameOptions.accuracy < 40)
+                this.accuracyText.fill = '#ff4d4d';     //RED
+            else if(gameOptions.accuracy >= 40 && gameOptions.accuracy < 60)
+                this.accuracyText.fill = '#ffb84d';      //ORANGE
+            else if(gameOptions.accuracy >= 60 && gameOptions.accuracy < 80)
+                this.accuracyText.fill = '#66ff66';  //GREEN
+            else if(gameOptions.accuracy >= 80 && gameOptions.accuracy < 90)
+                this.accuracyText.fill = '#00FFFF';     //BLUE
+            else if(gameOptions.accuracy >= 90 && gameOptions.accuracy < 98)
+                this.accuracyText.fill = '#cc99ff';     //PURPLE
+            else if(gameOptions.accuracy >= 98)
+                this.accuracyText.fill = '#ffff66';      //YELLOW
+            
+            this.accuracyText.fontSize = 20;
         }
         else if (gameOptions.cameFromMenu){
             this.finalText = this.game.add.text(gameOptions.gameWidth/2, gameOptions.gameHeight/6.25, '');
@@ -52,7 +72,9 @@ shooter1942.menu_highscore = {
         this.returnText.anchor.setTo(.5);
         this.returnText.font = 'Press Start 2P';
         this.returnText.fill = 'lightgrey';
-        this.returnText.fontSize = 24;
+        this.returnText.fontSize = 20;
+        
+       
     },
     
     update:function(){
