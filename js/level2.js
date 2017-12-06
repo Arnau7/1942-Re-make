@@ -12,7 +12,8 @@ shooter1942.level2 = {
         this.load.spritesheet('enemy1', 'img/E_01.png', 17, 16);       //Enemy1
         this.load.spritesheet('enemy2', 'img/E_02.png', 33, 29);            //Enemy2
         this.load.spritesheet('enemy3', 'img/E_03.png', 65, 50);        
-        this.load.spritesheet('explosion','img/enemy_kill.png',19,17);      //Enemy death
+        this.load.spritesheet('explosion','img/enemy_kill.png',19,17);      //Enemy 1/2death
+        this.load.spritesheet('explosion3', 'img/E_03.png');
         this.load.image('double_bullet','img/double_bullet.png');           //Doble Bala
         this.load.image('rolls', 'img/pUp_extraLife.png');                  
         this.load.image('lives', 'img/P_left.png');
@@ -471,16 +472,24 @@ shooter1942.level2 = {
     loadExplosions:function(){
         this.explosions = this.add.group();
     },
-    createExplosion:function(_x, _y){
+    createExplosion:function(_x, _y, type){
         var explosion = this.explosions.getFirstExists(false);
         if(!explosion){
-            explosion = new shooter1942.explosionPrefab(this.game,_x, _y);
+            explosion = new shooter1942.explosionPrefab(this.game,_x, _y, type);
             this.explosions.add(explosion);
         }
         else{
             explosion.reset(_x,_y);
         }
-        explosion.animations.play('explode',10,false,true);
+        if(type == 1){
+            explosion.animations.play('explode',10,false,true);
+        }
+        else if(type == 2){
+            explosion.animations.play('explode',10,false,true);
+        }
+        else if(type == 3){
+            explosion.animations.play('explode3',10,false,true);
+        }
     },
 
 
