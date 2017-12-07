@@ -27,6 +27,7 @@ shooter1942.playerPrefab = function(game, x, y, speed) {
     this.canRoll = true;
     this.game.sound_roll = this.game.add.audio('rollSound');
     
+    gameOptions.threshold = false;
     gameOptions.playerRespawning = false;
    
 };
@@ -95,14 +96,18 @@ shooter1942.playerPrefab.prototype.update = function(){
 };
 shooter1942.playerPrefab.prototype.idle = function() {
     this.animations.play('idle');
-    gameOptions.immunity = false;
+    //gameOptions.immunity = false;
     //console.log('Finished Roll\nVulnerable');
     this.canRoll = true;
+    gameOptions.threshold = false;
+    this.game.time.events.add(Phaser.Timer.SECOND*0.2, this.immunity,this);
+    
 };
 shooter1942.playerPrefab.prototype.rolling = function() {
-    if(gameOptions.rolls > 0 && !gameOptions.immunity){
+    if(gameOptions.rolls > 0 && !gameOptions.threshold){
         this.game.sound_roll.play();
         gameOptions.immunity = true;
+        gameOptions.threshold = true;
         this.canRoll = false;
         gameOptions.rolls--;
         this.animations.play('roll');
@@ -110,5 +115,11 @@ shooter1942.playerPrefab.prototype.rolling = function() {
         this.game.time.events.add(Phaser.Timer.SECOND*1.5, this.idle,this);
     }
 };
+//This function gives the player enough time to chain rolls and keep the immunity
+shooter1942.playerPrefab.prototype.immunity = function(){
+    //If the player is not rolling mustn't be immune
+    if(this.canRoll)
+        gameOptions.immunity = false;
+}
 
     

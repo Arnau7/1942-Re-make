@@ -7,23 +7,25 @@ var gameOptions = {
     playerPosX:         0,
     playerPosY:         0,
     powerup_speed:      75,
-    lives:              2,
-    rolls:              3,
-    score:              0,
-    backgroundSpeed:    0,
+    lives:              2,      //Number of lives of the player
+    rolls:              3,      //Number of rolls the player can perform
+    score:              0,      //Points gained during a level
+    highscore:          0,
+    backgroundSpeed:    0,    
     enemy1Speed:        130,
     enemy1BulletSpeed:  180,
     enemy2Speed:        100,
-    enemy3Speed:        -50,
+    enemy3Speed:        -70,
     bullet_playerSpeed: -400,
     bullet_enemySpeed:  200,
-    immunity:           false,
-    cameFromMenu:       false,
-    playerRespawning:   false,
-    enemy3Killed:       0,
-    totalEnemiesKilled: 0,
-    accuracy:           0,
-    developer:          true
+    immunity:           false,  //Makes player immune to all damage
+    threshold:          false,  //Allows chain of rolls before player immunity expires
+    cameFromMenu:       false,  //Checks if came from a menu or a level
+    playerRespawning:   false,  //Checks if between death and respawn
+    enemy3Killed:       0,      //Used to count enemy3 killed
+    totalEnemiesKilled: 0,      //Used to count enemies killed in a level
+    accuracy:           0,      //Rating: enemies killed / enemies respawned * 100
+    developer:          true    //Used to unlock "L" and "R" buttons in levels
 };
 
 shooter1942.game = new Phaser.Game(gameOptions.gameWidth, gameOptions.gameHeight, Phaser.AUTO,null,this,false,false);

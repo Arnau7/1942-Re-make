@@ -32,6 +32,9 @@ shooter1942.level2 = {
         this.escape = this.game.input.keyboard.addKey(Phaser.Keyboard.ESC);
         this.z = this.game.input.keyboard.addKey(Phaser.Keyboard.Z);
         
+        this.l = this.game.input.keyboard.addKey(Phaser.Keyboard.L);
+        this.r = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
+        
         //SOUND
         this.load.audio('theme', 'sound/stage_theme.mp3');
         //this.music = new Phaser.Sound(this.game, 'theme', 1, true);
@@ -93,11 +96,11 @@ shooter1942.level2 = {
         //this.enemy2Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 12, this.createEnemy2, this);
         //this.enemy1Timer2 = this.game.time.events.loop(Phaser.Timer.SECOND * 24, this.createEnemy1, this);
         //this.enemy2Timer2 = this.game.time.events.loop(Phaser.Timer.SECOND * 30, this.createEnemy2, this);
-        this.createEnemy3 = this.game.time.events.add(Phaser.Timer.SECOND * 2, this.createEnemy3, this);
+        this.createEnemy3Timer = this.game.time.events.add(Phaser.Timer.SECOND * 2, this.createEnemy3, this);;
         
         //PowerUps
         this.loadpUp();
-        this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 40, this.createpUp, this);
+        this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 38, this.createpUp, this);
 
         //Explosiosn
         this.loadExplosions();
@@ -154,7 +157,7 @@ shooter1942.level2 = {
         
         // Simple debug per anar coneixent la posició del fons, alomillor mes endevant podem fer un upgrade
         // i fer una barra de progrés (Ho deix com a proposta) de que te queda de nivell
-        this.game.debug.text('Posició Y del fons: ' + this.fons.position.y, 5, 15, 'DDDDDD');
+        this.game.debug.text('Posició Y del fons: ' + Math.trunc(this.fons.position.y), 5, 15, 'DDDDDD');
         
         // Player roll
         /*if (this.space.isDown && this.space.downDuration(1) && this.player.rolls > 0) {
@@ -176,6 +179,16 @@ shooter1942.level2 = {
         this.livesText.setText(gameOptions.lives);
         this.rollsText.setText(gameOptions.rolls);
         this.scoreText.setText(gameOptions.score);
+        
+        //DEVELOPER BUTTONS (change to false in main.js to disable or true to enable)
+        if(gameOptions.developer){
+            if(this.l.isDown && this.l.downDuration(1) && gameOptions.lives < 50) 
+                //EXTRA LIFE WITH "L"
+                gameOptions.lives++;
+            if(this.r.isDown && this.r.downDuration(1) && gameOptions.rolls < 50)  
+                //EXTRA ROLL WITH "R"
+                gameOptions.rolls++;
+        }
     },
     
 
@@ -196,7 +209,9 @@ shooter1942.level2 = {
     },
     playerImmunity:function(){
         this.player.tint = 0xffffff;
+        gameOptions.threshold = false;
         gameOptions.immunity = false;
+ 
     },
     playerGotHit:function(player, bulletEnemy){
         if(!gameOptions.immunity){
@@ -245,7 +260,8 @@ shooter1942.level2 = {
         this.enemies.add(enemy);
     },
     createEnemy3:function(){
-        var enemy = new shooter1942.enemy3Prefab(this.game,this.rnd.integerInRange(65,this.world.width-65),gameOptions.gameHeight, 2);
+        var enemy = new shooter1942.enemy3Prefab(this.game,this.world.width - 65*1.5,gameOptions.gameHeight, 2);
+        //this.rnd.integerInRange(this.world.width/2 +65,this.world.width-65)
         
         this.enemies.add(enemy);
     },
@@ -311,7 +327,7 @@ shooter1942.level2 = {
         else {
             enemy.hitsLeft--;
             this.sound_enemyDeath.play();
-            this.createExplosion(enemy.position.x, enemy.position.y, 2);
+            //this.createExplosion(enemy.position.x, enemy.position.y, 2);
             bullet.kill();
             gameOptions.score += 100;
 
@@ -483,12 +499,15 @@ shooter1942.level2 = {
         }
         if(type == 1){
             explosion.animations.play('explodePlayer',10,false,true);
+            explosion.scale.setTo(1);
         }
         else if(type == 2){
             explosion.animations.play('explode',10,false,true);
+            explosion.scale.setTo(1);
         }
         else if(type == 3){
             explosion.animations.play('explode3',10,false,true);
+            explosion.scale.setTo(1.5);
         }
     },
 
@@ -499,6 +518,7 @@ shooter1942.level2 = {
         //this.player.kill();
         gameOptions.immunity = true;
         gameOptions.playerRespawning = true;
+        gameOptions.threshold = true;
         this.game.time.events.add(Phaser.Timer.SECOND*1.5, this.playerRespawn,this);
     },
     quit:function(){

@@ -24,113 +24,78 @@ shooter1942.enemy3Prefab.prototype.constructor = shooter1942.enemy3Prefab;
 shooter1942.enemy3Prefab.prototype.update = function() {
     
     //-------------------MOVEMENT-----------------------
-
+    
     switch(this.phase){
+        //Pujar
         case 0:
-            this.body.velocity.x = 0;
-            this.body.velocity.y = gameOptions.enemy3Speed;
-            if(this.body.position.y >= gameOptions.gameHeight/1.5 && !gameOptions.playerRespawning)
-            {
-                if(this.level == 1)
-                {
-                    shooter1942.level1.createBulletEnemy(this);
-                }
-                else if(this.level == 2)
-                {
-                    shooter1942.level2.createBulletEnemy(this);
-                }
-                else if(this.level == 3)
-                {
-                    shooter1942.level3.createBulletEnemy(this);
-                }
-                this.phase++;
-                //this.animations.play('E02_down');
-            }
-            break;
-        case 1:
-            this.body.velocity.x = 0;
-            this.body.velocity.y = -gameOptions.enemy3Speed;
-            if(this.body.position.y >= gameOptions.gameHeight*3/4 && !gameOptions.playerRespawning)
-            {
-                if(this.level == 1)
-                {
-                    shooter1942.level1.createBulletEnemyCone(this);
-                }
-                else if(this.level == 2)
-                {
-                    shooter1942.level2.createBulletEnemyCone(this);
-                }
-                else if(this.level == 3)
-                {
-                    shooter1942.level3.createBulletEnemyCone(this);
-                }
-                this.phase++;
-                //this.animations.play('E02_up');
-            }
-            break;
-        case 2:
             this.body.velocity.x = 0;
             this.body.velocity.y = gameOptions.enemy3Speed;
             if(this.body.position.y <= gameOptions.gameHeight/5 && !gameOptions.playerRespawning)
             {
-                if(this.level == 1)
-                {
-                    shooter1942.level1.createBulletEnemyCone(this);
-                }
-                else if(this.level == 2)
-                {
-                    shooter1942.level2.createBulletEnemyCone(this);
-                }
-                else if(this.level == 3)
-                {
-                    shooter1942.level3.createBulletEnemyCone(this);
-                }
-                this.phase = 1;
-                //this.animations.play('E02_down');
-            }
-            break;
-        case 3:
-            this.body.velocity.x = -gameOptions.enemy2Speed;
-            this.body.velocity.y = 0;
-            if(this.body.position.x <= 64 && !gameOptions.playerRespawning)
-            {
-                if(this.level == 1)
-                {
-                    shooter1942.level1.createBulletEnemyCone(this);
-                }
-                else if(this.level == 2)
-                {
-                    shooter1942.level2.createBulletEnemyCone(this);
-                }
-                else if(this.level == 3)
-                {
-                    shooter1942.level1.createBulletEnemyCone(this);
-                }
+                this.shoot();
                 this.phase++;
                 //this.animations.play('E02_down');
             }
             break;
-        case 4:
+        //Pujar i cap a l'esquerra
+        case 1:
             this.body.velocity.x = 0;
-            this.body.velocity.y = gameOptions.enemy2Speed;
-            //this.animations.play('E03_idle');
-            if(this.body.position.y == gameOptions.gameHeight * 3/4 && !gameOptions.playerRespawning)
+            this.body.velocity.y = gameOptions.enemy3Speed/3;  
+            this.body.velocity.x = gameOptions.enemy3Speed/2;           
+            if(this.body.position.x <= gameOptions.gameWidth/2 - 40)
             {
-                if(this.level == 1)
-                {
-                    shooter1942.level1.createBulletEnemyCone(this);
-                }
-                else if(this.level == 2)
-                {
-                    shooter1942.level2.createBulletEnemyCone(this);
-                }
-                else if(this.level == 3)
-                {
-                    shooter1942.level1.createBulletEnemyCone(this);
-                }
+                this.shoot();
+                this.phase++;
             }
             break;
-        default:
+        //Baixar i cap a l'esquerra
+        case 2:
+            this.body.velocity.x = 0;
+            this.body.velocity.y = -gameOptions.enemy3Speed/3;  
+            this.body.velocity.x = gameOptions.enemy3Speed/2;           
+            if(this.body.position.y >= gameOptions.gameHeight/5)
+            {
+                this.shoot();
+                this.phase++;
+            }
+            break;
+        //Baixar
+        case 3:
+            this.body.velocity.x = 0;
+            this.body.velocity.y = -gameOptions.enemy3Speed;
+            if(this.body.position.y >= gameOptions.gameHeight*3/4 && !gameOptions.playerRespawning)
+            {
+                this.shoot();
+                this.phase++;
+            }
+            break;
+            //Pujar
+        case 4:
+            this.body.velocity.x = 0;
+            this.body.velocity.y = gameOptions.enemy3Speed;
+            if(this.body.position.y <= gameOptions.gameHeight/6 && !gameOptions.playerRespawning)
+            {
+                this.shoot();
+                this.phase--;
+            }
+            break;
+         default:
             break;
     }
 };
+//This function creates the bullet cone on its respective level
+shooter1942.enemy3Prefab.prototype.shoot = function()
+{
+    if(this.level == 1)
+    {
+        shooter1942.level1.createBulletEnemyCone(this);
+    }
+    else if(this.level == 2)
+    {
+        shooter1942.level2.createBulletEnemyCone(this);
+    }
+    else if(this.level == 3)
+    {
+        shooter1942.level3.createBulletEnemyCone(this);
+    } 
+}

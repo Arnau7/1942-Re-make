@@ -64,12 +64,12 @@ shooter1942.menu = {
         if(this.cursors.down.isDown && this.cursors.down.downDuration(1) && id < maxId){
             id++;
             this.buttonSound.play();
-            console.log(id);
+            //console.log(id);
         }
         else if(this.cursors.up.isDown && this.cursors.up.downDuration(1) && id > minId){
             id--;
             this.buttonSound.play();
-            console.log(id);
+            //console.log(id);
         }
         
         if(id == 0){
@@ -100,7 +100,6 @@ shooter1942.menu = {
             }
         }        
     },
-    
     startGame:function(){
         this.state.start('level2');
     },

@@ -1,5 +1,5 @@
 var shooter1942 = shooter1942 || {};
-
+//DURATION 1:25 minutes
 shooter1942.level1 = {
     init:function(){
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -100,7 +100,7 @@ shooter1942.level1 = {
         this.enemy2Timer2 = this.game.time.events.loop(Phaser.Timer.SECOND * 30, this.createEnemy2, this);
         //PowerUps
         this.loadpUp();
-        this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 40, this.createpUp, this);
+        this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 38, this.createpUp, this);
 
         //Explosiosn
         this.loadExplosions();
@@ -213,6 +213,7 @@ shooter1942.level1 = {
     },
     playerImmunity:function(){
         this.player.tint = 0xffffff;
+        gameOptions.threshold = false;
         gameOptions.immunity = false;
     },
     playerGotHit:function(player, bulletEnemy){
@@ -319,7 +320,7 @@ shooter1942.level1 = {
         }
         
         else {
-            this.createExplosion(enemy.position.x, enemy.position.y, 2);
+            //this.createExplosion(enemy.position.x, enemy.position.y, 2);
             enemy.hitsLeft--;
             this.sound_enemyDeath.play();
             bullet.kill();
@@ -458,6 +459,7 @@ shooter1942.level1 = {
         //this.player.kill();
         gameOptions.immunity = true;
         gameOptions.playerRespawning = true;
+        gameOptions.threshold = false;
         this.game.time.events.add(Phaser.Timer.SECOND*1.5, this.playerRespawn,this);
     },
     quit:function(){
