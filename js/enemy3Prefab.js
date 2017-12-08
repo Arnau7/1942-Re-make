@@ -39,10 +39,9 @@ shooter1942.enemy3Prefab.prototype.update = function() {
             break;
         //Pujar i cap a l'esquerra
         case 1:
-            this.body.velocity.x = 0;
             this.body.velocity.y = gameOptions.enemy3Speed/3;  
             this.body.velocity.x = gameOptions.enemy3Speed/2;           
-            if(this.body.position.x <= gameOptions.gameWidth/2 - 40)
+            if(this.body.position.x <= gameOptions.gameWidth/2 - 40 && !gameOptions.playerRespawning)
             {
                 this.shoot();
                 this.phase++;
@@ -50,10 +49,9 @@ shooter1942.enemy3Prefab.prototype.update = function() {
             break;
         //Baixar i cap a l'esquerra
         case 2:
-            this.body.velocity.x = 0;
             this.body.velocity.y = -gameOptions.enemy3Speed/3;  
             this.body.velocity.x = gameOptions.enemy3Speed/2;           
-            if(this.body.position.y >= gameOptions.gameHeight/5)
+            if(this.body.position.y >= gameOptions.gameHeight/5 && !gameOptions.playerRespawning)
             {
                 this.shoot();
                 this.phase++;
@@ -63,7 +61,7 @@ shooter1942.enemy3Prefab.prototype.update = function() {
         case 3:
             this.body.velocity.x = 0;
             this.body.velocity.y = -gameOptions.enemy3Speed;
-            if(this.body.position.y >= gameOptions.gameHeight*3/4 && !gameOptions.playerRespawning)
+            if(this.body.position.y >= gameOptions.gameHeight*0.7 && !gameOptions.playerRespawning)
             {
                 this.shoot();
                 this.phase++;

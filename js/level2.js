@@ -427,6 +427,14 @@ shooter1942.level2 = {
         //bulletEnemy.body.velocity.y = gameOptions.bullet_enemySpeed;
     },
     createBulletEnemyCone:function(enemy){
+        //Top-Left
+        //
+        //Top-Right
+        //
+        //Bot-Left
+        //+1, 0; -1, 0
+        //Bot-Right
+        //-1, 0; +1, 0
         for(var i = 0; i < 3; i++)
         {
             /*var bulletEnemy = this.bulletsEnemy.getFirstExists(false);
@@ -434,11 +442,12 @@ shooter1942.level2 = {
             {*/
                 if(i == 0)
                 {
-                    var bulletEnemy = new shooter1942.bulletEnemyPrefab(this.game, enemy.x, enemy.bottom);
+                    var bulletEnemy = new shooter1942.bulletEnemyPrefab(this.game, enemy.x, enemy.y);
                     this.bulletsEnemy.add(bulletEnemy);
                     
-                    this.dir_x = (this.player.body.position.x-50 - enemy.body.position.x);
-                    this.dir_y = (this.player.body.position.y-50 - enemy.body.position.y);
+                    //4t Quadrant
+                    this.dir_x = (this.player.body.position.x-75 - enemy.body.position.x);
+                    this.dir_y = (this.player.body.position.y-0 - enemy.body.position.y);
                     this.dir_mod = Math.sqrt(this.dir_x * this.dir_x + this.dir_y * this.dir_y);
                     this.dir_x /= this.dir_mod;
                     this.dir_y /= this.dir_mod;
@@ -447,7 +456,7 @@ shooter1942.level2 = {
                     bulletEnemy.body.velocity.y = this.dir_y * gameOptions.enemy1BulletSpeed;
                 }
                 else if(i == 1){
-                    var bulletEnemy = new shooter1942.bulletEnemyPrefab(this.game, enemy.x, enemy.bottom);
+                    var bulletEnemy = new shooter1942.bulletEnemyPrefab(this.game, enemy.x, enemy.y);
                     this.bulletsEnemy.add(bulletEnemy);
                     
                     this.dir_x = (this.player.body.position.x - enemy.body.position.x);
@@ -458,15 +467,14 @@ shooter1942.level2 = {
         
                     bulletEnemy.body.velocity.x = this.dir_x * gameOptions.enemy1BulletSpeed;
                     bulletEnemy.body.velocity.y = this.dir_y * gameOptions.enemy1BulletSpeed;
-                    bulletEnemy.body.velocity.y = this.dir_y * gameOptions.enemy1BulletSpeed;
                 }
                 else if(i == 2)
                 {
-                    var bulletEnemy = new shooter1942.bulletEnemyPrefab(this.game, enemy.x, enemy.bottom);
+                    var bulletEnemy = new shooter1942.bulletEnemyPrefab(this.game, enemy.x, enemy.y);
                     this.bulletsEnemy.add(bulletEnemy);
                     
-                    this.dir_x = (this.player.body.position.x+50 - enemy.body.position.x);
-                    this.dir_y = (this.player.body.position.y+50 - enemy.body.position.y);
+                    this.dir_x = (this.player.body.position.x+75 - enemy.body.position.x);
+                    this.dir_y = (this.player.body.position.y+0 - enemy.body.position.y);
                     this.dir_mod = Math.sqrt(this.dir_x * this.dir_x + this.dir_y * this.dir_y);
                     this.dir_x /= this.dir_mod;
                     this.dir_y /= this.dir_mod;
