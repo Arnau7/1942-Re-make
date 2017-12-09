@@ -1,5 +1,5 @@
 var shooter1942 = shooter1942 || {};
-//DURATION 1:25 minutes
+//DURATION 1:25 minutes = 85 seconds
 shooter1942.level1 = {
     init:function(){
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -124,6 +124,9 @@ shooter1942.level1 = {
         //this.modulus();
         gameOptions.playerRespawning = false;
         gameOptions.immunity = false;
+        gameOptions.totalEnemiesKilled = 0;
+        gameOptions.totalEnemiesSpawned = 0;
+        gameOptions.accuracy = 0;
     },
     
     update:function(){
@@ -188,10 +191,10 @@ shooter1942.level1 = {
         if(gameOptions.developer){
             if(this.l.isDown && this.l.downDuration(1) && gameOptions.lives < 50) 
                 //EXTRA LIFE WITH "L"
-                gameOptions.lives++;
+                gameOptions.lives = 50;
             if(this.r.isDown && this.r.downDuration(1) && gameOptions.rolls < 50)  
                 //EXTRA ROLL WITH "R"
-                gameOptions.rolls++;
+                gameOptions.rolls = 50;
         }
     },
     
@@ -208,7 +211,7 @@ shooter1942.level1 = {
         this.player.position.y = gameOptions.gameHeight - 100;
         gameOptions.playerRespawning = false;
         this.player.tint = 0x444444;
-        this.game.time.events.add(Phaser.Timer.SECOND*2, this.playerImmunity,this);
+        this.game.time.events.add(Phaser.Timer.SECOND*1, this.playerImmunity,this);
         
     },
     playerImmunity:function(){
@@ -258,7 +261,7 @@ shooter1942.level1 = {
         //this.createBulletEnemy(enemy);
     },
     createEnemy2:function(){
-        var enemy = new shooter1942.enemy2Prefab(this.game, this.rnd.integerInRange(16,this.world.width/2), 1, 1);
+        var enemy = new shooter1942.enemy2Prefab(this.game, this.rnd.integerInRange(40, this.world.width/2-40), 1, 1);
         
         this.enemies.add(enemy);
     },

@@ -16,6 +16,8 @@ shooter1942.enemy3Prefab = function(game, x, y, level){
     
     this.animations.play('E03_idle');
     //this.loadBulletsEnemy();
+    
+    this.phaseTimes = 2;
 };
 
 shooter1942.enemy3Prefab.prototype = Object.create(Phaser.Sprite.prototype);
@@ -30,7 +32,7 @@ shooter1942.enemy3Prefab.prototype.update = function() {
         case 0:
             this.body.velocity.x = 0;
             this.body.velocity.y = gameOptions.enemy3Speed;
-            if(this.body.position.y <= gameOptions.gameHeight/5 && !gameOptions.playerRespawning)
+            if(this.body.position.y <= gameOptions.gameHeight/5)
             {
                 this.shoot();
                 this.phase++;
@@ -41,7 +43,7 @@ shooter1942.enemy3Prefab.prototype.update = function() {
         case 1:
             this.body.velocity.y = gameOptions.enemy3Speed/3;  
             this.body.velocity.x = gameOptions.enemy3Speed/2;           
-            if(this.body.position.x <= gameOptions.gameWidth/2 - 40 && !gameOptions.playerRespawning)
+            if(this.body.position.x <= gameOptions.gameWidth/2 - 60)
             {
                 this.shoot();
                 this.phase++;
@@ -51,7 +53,7 @@ shooter1942.enemy3Prefab.prototype.update = function() {
         case 2:
             this.body.velocity.y = -gameOptions.enemy3Speed/3;  
             this.body.velocity.x = gameOptions.enemy3Speed/2;           
-            if(this.body.position.y >= gameOptions.gameHeight/5 && !gameOptions.playerRespawning)
+            if(this.body.position.y >= gameOptions.gameHeight/5)
             {
                 this.shoot();
                 this.phase++;
@@ -61,17 +63,20 @@ shooter1942.enemy3Prefab.prototype.update = function() {
         case 3:
             this.body.velocity.x = 0;
             this.body.velocity.y = -gameOptions.enemy3Speed;
-            if(this.body.position.y >= gameOptions.gameHeight*0.7 && !gameOptions.playerRespawning)
+            if(this.body.position.y >= gameOptions.gameHeight*0.7)
             {
-                this.shoot();
-                this.phase++;
+                if(this.phaseTimes > 0){
+                    this.shoot();
+                    this.phase++;
+                    this.phaseTimes--;
+                }
             }
             break;
             //Pujar
         case 4:
             this.body.velocity.x = 0;
             this.body.velocity.y = gameOptions.enemy3Speed;
-            if(this.body.position.y <= gameOptions.gameHeight/6 && !gameOptions.playerRespawning)
+            if(this.body.position.y <= gameOptions.gameHeight/6)
             {
                 this.shoot();
                 this.phase--;

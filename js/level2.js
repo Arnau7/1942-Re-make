@@ -90,17 +90,22 @@ shooter1942.level2 = {
         //Bullets
         this.loadBullets();
         this.loadBulletsEnemy();
+        
         //Enemies
         this.loadEnemy();
-        //this.enemy1Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 6, this.createEnemy1, this);
-        //this.enemy2Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 12, this.createEnemy2, this);
-        //this.enemy1Timer2 = this.game.time.events.loop(Phaser.Timer.SECOND * 24, this.createEnemy1, this);
-        //this.enemy2Timer2 = this.game.time.events.loop(Phaser.Timer.SECOND * 30, this.createEnemy2, this);
-        this.createEnemy3Timer = this.game.time.events.add(Phaser.Timer.SECOND * 2, this.createEnemy3, this);;
+        this.enemy1Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 6, this.createEnemy1, this);
+        this.enemy1Timer2 = this.game.time.events.add(Phaser.Timer.SECOND * 43, this.createEnemy1, this);
+        
+        this.enemy2Timer = this.game.time.events.loop(Phaser.Timer.SECOND * 12, this.createEnemy2, this);
+        this.enemy2Timer2 = this.game.time.events.add(Phaser.Timer.SECOND * 61, this.createEnemy2, this);
+        
+        this.createEnemy3Timer = this.game.time.events.add(Phaser.Timer.SECOND * 26, this.createEnemy3, this);
+        this.createEnemy3Timer = this.game.time.events.add(Phaser.Timer.SECOND * 52, this.createEnemy3, this);
+        this.createEnemy3Timer2 = this.game.time.events.add(Phaser.Timer.SECOND * 70, this.createEnemy3, this);
         
         //PowerUps
         this.loadpUp();
-        this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 38, this.createpUp, this);
+        this.powerUpTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 18, this.createpUp, this);
 
         //Explosiosn
         this.loadExplosions();
@@ -123,6 +128,9 @@ shooter1942.level2 = {
         //Important bools to reset in a new level
         gameOptions.playerRespawning = false;
         gameOptions.immunity = false;
+        gameOptions.totalEnemiesKilled = 0;
+        gameOptions.totalEnemiesSpawned = 0;
+        gameOptions.accuracy = 0;
     },
     
     update:function(){
@@ -150,6 +158,7 @@ shooter1942.level2 = {
         // Si la posició del punt anclatge es mes gran a la mida del tile + finestra, atura d'avançar (final de nivell)
         if (this.fons.position.y >= 3072 +gameOptions.gameHeight * 2) {
             gameOptions.backgroundSpeed = 0;
+            this.enemiesKilledRating();
             this.soundtrack.stop();
             this.music_cleared.play();
             this.state.start('menu_highscore');
@@ -184,10 +193,10 @@ shooter1942.level2 = {
         if(gameOptions.developer){
             if(this.l.isDown && this.l.downDuration(1) && gameOptions.lives < 50) 
                 //EXTRA LIFE WITH "L"
-                gameOptions.lives++;
+                gameOptions.lives = 50;
             if(this.r.isDown && this.r.downDuration(1) && gameOptions.rolls < 50)  
                 //EXTRA ROLL WITH "R"
-                gameOptions.rolls++;
+                gameOptions.rolls = 50;
         }
     },
     
@@ -204,7 +213,7 @@ shooter1942.level2 = {
         this.player.position.y = gameOptions.gameHeight - 100;
         gameOptions.playerRespawning = false;
         this.player.tint = 0x444444;
-        this.game.time.events.add(Phaser.Timer.SECOND*2, this.playerImmunity,this);
+        this.game.time.events.add(Phaser.Timer.SECOND*1, this.playerImmunity,this);
         
     },
     playerImmunity:function(){
@@ -255,7 +264,7 @@ shooter1942.level2 = {
         //this.createBulletEnemy(enemy);
     },
     createEnemy2:function(){
-        var enemy = new shooter1942.enemy2Prefab(this.game, this.rnd.integerInRange(16,this.world.width/2), 1, 2);
+        var enemy = new shooter1942.enemy2Prefab(this.game, this.rnd.integerInRange(40, this.world.width/2), 1, 2);
         
         this.enemies.add(enemy);
     },
@@ -275,7 +284,7 @@ shooter1942.level2 = {
                 //this.explosions.scale.setTo(4);
                 enemy.destroy();
                 gameOptions.lives--;
-
+                gameOptions.totalEnemiesKilled++;
                 switch (enemy.enemyType) {
                     case 1:
                         gameOptions.score += 50;
@@ -306,6 +315,7 @@ shooter1942.level2 = {
             this.sound_enemyDeath.play();
             bullet.kill();
             enemy.kill();
+            gameOptions.totalEnemiesKilled++;
             switch (enemy.enemyType) {
                 case 1:
                     this.createExplosion(enemy.position.x, enemy.position.y, 2);
@@ -521,7 +531,13 @@ shooter1942.level2 = {
 
 
     //---------------LEVEL FUNCTIONS------------------------
-    
+    enemiesKilledRating:function(){
+        gameOptions.accuracy = (gameOptions.totalEnemiesKilled / this.enemies.length)*100;
+        gameOptions.accuracy = Math.round(gameOptions.accuracy);
+        console.log("Enemies created: "+this.enemies.length);
+        console.log("Enemies killed: "+gameOptions.totalEnemiesKilled);
+        console.log("Rating: "+gameOptions.accuracy);
+    },
     resetLevel:function(){
         //this.player.kill();
         gameOptions.immunity = true;

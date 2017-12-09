@@ -23,6 +23,7 @@ var gameOptions = {
     cameFromMenu:       false,  //Checks if came from a menu or a level
     playerRespawning:   false,  //Checks if between death and respawn
     enemy3Killed:       0,      //Used to count enemy3 killed
+    totalEnemiesSpawned:0,      //(ONLY USE IF REUSING ENEMIES) Used to count enemies spawned in a level 
     totalEnemiesKilled: 0,      //Used to count enemies killed in a level
     accuracy:           0,      //Rating: enemies killed / enemies respawned * 100
     developer:          true    //Used to unlock "L" and "R" buttons in levels

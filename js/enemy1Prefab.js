@@ -36,7 +36,7 @@ shooter1942.enemy1Prefab.prototype.update = function() {
 //        shooter1942.level1.createBulletEnemy(this);
     if(this.shoot && !gameOptions.playerRespawning && this.alive)
     {
-        if(this.body.position.y >= gameOptions.playerPosY - 150 && this.body.position.y <= gameOptions.playerPosY - 140)
+        if(this.body.position.y >= gameOptions.playerPosY - 200 && this.body.position.y <= gameOptions.playerPosY - 140)
         {
             if(this.level == 1)
             {

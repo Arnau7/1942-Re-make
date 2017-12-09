@@ -14,7 +14,7 @@ shooter1942.enemy2Prefab = function(game, x, y, level){
     this.outOfBoundsKill = true;
     this.phase = 0;
     this.level = level;
-    this.hitsLeft = 5;
+    this.hitsLeft = 6;
     this.enemyType = 2;
     this.animations.play('E02_idle');
     //this.loadBulletsEnemy();
@@ -30,19 +30,8 @@ shooter1942.enemy2Prefab.prototype.update = function() {
         case 0:
             this.body.velocity.x = 0;
             this.body.velocity.y = gameOptions.enemy2Speed;
-            if(this.body.position.y >= gameOptions.gameHeight/2 && !gameOptions.playerRespawning){
-                if(this.level == 1)
-                {
-                    shooter1942.level1.createBulletEnemy(this);
-                }
-                else if(this.level == 2)
-                {
-                    shooter1942.level2.createBulletEnemy(this);
-                }
-                else if(this.level == 3)
-                {
-                    shooter1942.level1.createBulletEnemy(this);
-                }
+            if(this.body.position.y >= gameOptions.gameHeight/2){
+                this.shoot();
                 this.phase++;
                 this.animations.play('E02_right');
             }
@@ -50,7 +39,7 @@ shooter1942.enemy2Prefab.prototype.update = function() {
         case 1:
             this.body.velocity.x = gameOptions.enemy2Speed;
             this.body.velocity.y = 0;
-            if(this.body.position.x >= gameOptions.gameWidth - 64 && !gameOptions.playerRespawning){
+            if(this.body.position.x >= gameOptions.gameWidth - 64){
                 this.phase++;
                 this.animations.play('E02_up');
             }
@@ -58,7 +47,7 @@ shooter1942.enemy2Prefab.prototype.update = function() {
         case 2:
             this.body.velocity.x = 0;
             this.body.velocity.y = -gameOptions.enemy2Speed;
-            if(this.body.position.y <= gameOptions.gameHeight/4 && !gameOptions.playerRespawning){
+            if(this.body.position.y <= gameOptions.gameHeight/4){
                 this.phase++;
                 this.animations.play('E02_left');
             }
@@ -66,20 +55,9 @@ shooter1942.enemy2Prefab.prototype.update = function() {
         case 3:
             this.body.velocity.x = -gameOptions.enemy2Speed;
             this.body.velocity.y = 0;
-            if(this.body.position.x <= 64 && !gameOptions.playerRespawning)
+            if(this.body.position.x <= 64)
             {
-                if(this.level == 1)
-                {
-                    shooter1942.level1.createBulletEnemy(this);
-                }
-                else if(this.level == 2)
-                {
-                    shooter1942.level2.createBulletEnemy(this);
-                }
-                else if(this.level == 3)
-                {
-                    shooter1942.level3.createBulletEnemy(this);
-                }
+                this.shoot();
                 this.phase++;
                 this.animations.play('E02_down');
             }
@@ -88,23 +66,26 @@ shooter1942.enemy2Prefab.prototype.update = function() {
             this.body.velocity.x = 0;
             this.body.velocity.y = gameOptions.enemy2Speed;
             this.animations.play('E02_idle');
-            if(this.body.position.y == gameOptions.gameHeight * 3/4 && !gameOptions.playerRespawning)
+            if(this.body.position.y == gameOptions.gameHeight * 3/4)
             {
-                if(this.level == 1)
-                {
-                    shooter1942.level1.createBulletEnemy(this);
-                }
-                else if(this.level == 2)
-                {
-                    shooter1942.level2.createBulletEnemy(this);
-                }
-                else if(this.level == 3)
-                {
-                    shooter1942.level3.createBulletEnemy(this);
-                }
+                this.shoot();
             }
             break;
         default:
             break;
     }
 };
+shooter1942.enemy2Prefab.prototype.shoot = function() {
+    if(this.level == 1)
+    {
+        shooter1942.level1.createBulletEnemy(this);
+    }
+    else if(this.level == 2)
+    {
+        shooter1942.level2.createBulletEnemy(this);
+    }
+    else if(this.level == 3)
+    {
+        shooter1942.level3.createBulletEnemy(this);
+    }
+}
