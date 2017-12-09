@@ -49,43 +49,15 @@ shooter1942.level2 = {
     },
     
     create:function(){
+        
+        gameOptions.level = 'Level 2';
+        
         this.buttonSelect = this.add.audio('select');
         // Crear un objecte fons, per poder canviar-li les variables i pintar-ho
         this.fons = this.game.add.tileSprite(0, 0, gameOptions.gameWidth, 3072, 'bg2');
         this.fons.scale.y = 1.5; // S'escala a 1'5 perque l'sprite és petit. 
         this.fons.scale.x = 1.5; // Està calculat que en X, si s'escala en 1'5 dona un numero exacte, que es el width de la finestra
         this.fons.anchor.y = 0.89; // Aquest anchor en Y situa el punt d'anclatgef de l'imatge al punt exacte d'abaix, per poder correr cap adalt        
-        
-        //HUD RELATED
-        //Rolls
-        this.rolls = this.game.add.image(gameOptions.gameWidth-60, gameOptions.gameHeight-33,'rollIcon');
-        this.rolls.anchor.setTo(.5);
-        this.rolls.scale.setTo(0.75);
-        //Rolls Text
-        this.rollsText = this.game.add.text(gameOptions.gameWidth-30, gameOptions.gameHeight-30, gameOptions.rolls);
-        this.rollsText.anchor.setTo(.5);
-        this.rollsText.fill = 'white';
-        this.rollsText.font='Press Start 2P';
-        this.rollsText.stroke= 'black';
-        //this.rollsText.strokeThikckness = 1;
-        //Lives
-        this.lives = this.game.add.image(30, gameOptions.gameHeight-30,'lives');
-        this.lives.anchor.setTo(.5);
-        this.lives.scale.setTo(1.5);
-        //Lives Text
-        this.livesText = this.game.add.text(60, gameOptions.gameHeight-30, gameOptions.lives);
-        this.livesText.anchor.setTo(.5);
-        this.livesText.fill = 'white';
-        this.livesText.font='Press Start 2P';
-        this.livesText.stroke= 'black';
-        //this.livesText.strokeThikckness = 2;
-        //Score
-        //Score Text
-        this.scoreText = this.game.add.text(gameOptions.gameWidth/2, 30, gameOptions.score);
-        this.scoreText.anchor.setTo(.5);
-        this.scoreText.fill = 'white';
-        this.scoreText.font='Press Start 2P';
-        this.scoreText.stroke= 'black';
         
         //Bullets
         this.loadBullets();
@@ -124,6 +96,50 @@ shooter1942.level2 = {
         this.sound_playerDeath = this.add.audio('playerDeath');
         this.sound_shoot = this.add.audio('shoot');
         this.sound_enemyDeath = this.add.audio('enemyDeath');
+        
+        //--------------HUD RELATED------------
+        //LEVEL
+        this.levelText = this.game.add.text(gameOptions.gameWidth/2, gameOptions.gameHeight*0.2, gameOptions.level);
+        this.levelText.anchor.setTo(.5);
+        this.levelText.font = 'Press Start 2P';
+        this.levelText.fill = 'yellow';
+        this.levelText.fontSize = 30;
+        this.levelTextTimer = this.game.time.events.add(Phaser.Timer.SECOND * 3, this.levelTextFunction, this);
+        this.levelText.setShadow(2,2,'black', true, true);
+        //Rolls
+        this.rolls = this.game.add.image(gameOptions.gameWidth-60, gameOptions.gameHeight-33,'rollIcon');
+        this.rolls.anchor.setTo(.5);
+        this.rolls.scale.setTo(0.75);
+        //Rolls Text
+        this.rollsText = this.game.add.text(gameOptions.gameWidth-30, gameOptions.gameHeight-30, gameOptions.rolls);
+        this.rollsText.anchor.setTo(.5);
+        this.rollsText.fill = 'white';
+        this.rollsText.font='Press Start 2P';
+        //this.rollsText.stroke= 'black';
+        this.rollsText.fontSize = 18;
+        //this.rollsText.strokeThikckness = 1;
+        //Lives
+        this.lives = this.game.add.image(30, gameOptions.gameHeight-30,'lives');
+        this.lives.anchor.setTo(.5);
+        this.lives.scale.setTo(1.5);
+        //Lives Text
+        this.livesText = this.game.add.text(60, gameOptions.gameHeight-30, gameOptions.lives);
+        this.livesText.anchor.setTo(.5);
+        this.livesText.fill = 'white';
+        this.livesText.font='Press Start 2P';
+        //this.livesText.stroke= 'black';
+        this.livesText.fontSize = 18;
+        //this.livesText.strokeThikckness = 2;
+        //Score
+        //Score Text
+        this.scoreText = this.game.add.text(gameOptions.gameWidth/2, 25, gameOptions.score);
+        this.scoreText.anchor.setTo(.5);
+        this.scoreText.fill = 'lightblue';
+        this.scoreText.font='Press Start 2P';
+        //this.scoreText.stroke= 'black';
+        this.scoreText.fontSize = 18;
+        this.scoreText.setShadow(2,2,'black',true,true);
+        //-------------------------------------------------------------------------
         
         //Important bools to reset in a new level
         gameOptions.playerRespawning = false;
@@ -166,7 +182,7 @@ shooter1942.level2 = {
         
         // Simple debug per anar coneixent la posició del fons, alomillor mes endevant podem fer un upgrade
         // i fer una barra de progrés (Ho deix com a proposta) de que te queda de nivell
-        this.game.debug.text('Posició Y del fons: ' + Math.trunc(this.fons.position.y), 5, 15, 'DDDDDD');
+        //this.game.debug.text('Posició Y del fons: ' + Math.trunc(this.fons.position.y), 5, 15, 'DDDDDD');
         
         // Player roll
         /*if (this.space.isDown && this.space.downDuration(1) && this.player.rolls > 0) {
@@ -531,6 +547,9 @@ shooter1942.level2 = {
 
 
     //---------------LEVEL FUNCTIONS------------------------
+    levelTextFunction:function(){
+        this.levelText.destroy();
+    },
     enemiesKilledRating:function(){
         gameOptions.accuracy = (gameOptions.totalEnemiesKilled / this.enemies.length)*100;
         gameOptions.accuracy = Math.round(gameOptions.accuracy);

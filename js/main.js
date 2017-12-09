@@ -1,6 +1,7 @@
 var shooter1942 = shooter1942 || {};
 
 var gameOptions = {
+    level:              0,
     gameWidth:          336,
     gameHeight:         480,
     playerSpeed:        160,

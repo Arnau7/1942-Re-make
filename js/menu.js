@@ -101,7 +101,7 @@ shooter1942.menu = {
         }        
     },
     startGame:function(){
-        this.state.start('level2');
+        this.state.start('level1');
     },
     rankingMenu:function(){
         gameOptions.cameFromMenu = true;
