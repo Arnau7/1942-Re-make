@@ -72,8 +72,8 @@ shooter1942.level2 = {
         this.enemy2Timer2 = this.game.time.events.add(Phaser.Timer.SECOND * 61, this.createEnemy2, this);
         
         this.createEnemy3Timer = this.game.time.events.add(Phaser.Timer.SECOND * 26, this.createEnemy3, this);
-        this.createEnemy3Timer = this.game.time.events.add(Phaser.Timer.SECOND * 52, this.createEnemy3, this);
-        this.createEnemy3Timer2 = this.game.time.events.add(Phaser.Timer.SECOND * 70, this.createEnemy3, this);
+        this.createEnemy3Timer = this.game.time.events.add(Phaser.Timer.SECOND * 45, this.createEnemy3, this);
+        this.createEnemy3Timer2 = this.game.time.events.add(Phaser.Timer.SECOND * 64, this.createEnemy3B, this);
         
         //PowerUps
         this.loadpUp();
@@ -172,7 +172,14 @@ shooter1942.level2 = {
         this.fons.position.y += gameOptions.backgroundSpeed;
         
         // Si la posició del punt anclatge es mes gran a la mida del tile + finestra, atura d'avançar (final de nivell)
-        if (this.fons.position.y >= 3072 +gameOptions.gameHeight * 2) {
+        if (this.fons.position.y >= 3072 + gameOptions.gameHeight) {
+            this.game.time.events.remove(this.enemy1Timer);
+            this.game.time.events.remove(this.enemy2Timer);
+        }
+        if (this.fons.position.y >= 3072 + gameOptions.gameHeight * 2) {
+            //this.enemy1Timer.destroy;
+            //this.enemy2Timer.destroy;
+            this.game.time.events.remove(this.powerUpTimer);
             gameOptions.backgroundSpeed = 0;
             this.enemiesKilledRating();
             this.soundtrack.stop();
@@ -182,14 +189,7 @@ shooter1942.level2 = {
         
         // Simple debug per anar coneixent la posició del fons, alomillor mes endevant podem fer un upgrade
         // i fer una barra de progrés (Ho deix com a proposta) de que te queda de nivell
-        //this.game.debug.text('Posició Y del fons: ' + Math.trunc(this.fons.position.y), 5, 15, 'DDDDDD');
-        
-        // Player roll
-        /*if (this.space.isDown && this.space.downDuration(1) && this.player.rolls > 0) {
-            this.player.animations.play('roll');
-            console.log('rolling');
-            this.player.rolls -= 1;
-        }*/
+        this.game.debug.text('Posició Y del fons: ' + Math.trunc(this.fons.position.y), 5, 15, 'DDDDDD');
     
        //Bala del player ha donat a un enemic 
         this.game.physics.arcade.overlap(this.enemies,this.bullets,this.enemyGotHit,null,this);
@@ -285,7 +285,13 @@ shooter1942.level2 = {
         this.enemies.add(enemy);
     },
     createEnemy3:function(){
-        var enemy = new shooter1942.enemy3Prefab(this.game,this.world.width - 65*1.5,gameOptions.gameHeight, 2);
+        var enemy = new shooter1942.enemy3Prefab(this.game,this.world.width - 65*1.5,gameOptions.gameHeight, 2,0);
+        //this.rnd.integerInRange(this.world.width/2 +65,this.world.width-65)
+        
+        this.enemies.add(enemy);
+    },
+    createEnemy3B:function(){
+        var enemy = new shooter1942.enemy3Prefab(this.game,this.world.width - 65*1.5,gameOptions.gameHeight, 2,1);
         //this.rnd.integerInRange(this.world.width/2 +65,this.world.width-65)
         
         this.enemies.add(enemy);

@@ -1,6 +1,6 @@
 var shooter1942 = shooter1942 || {};
 
-shooter1942.enemy3Prefab = function(game, x, y, level){
+shooter1942.enemy3Prefab = function(game, x, y, level, type){
     Phaser.Sprite.call(this, game, x, y, 'enemy3');
     this.animations.add('E03_idle', [0, 1], 10, true);
     this.animations.add('E03_death', [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 10, true);
@@ -13,11 +13,12 @@ shooter1942.enemy3Prefab = function(game, x, y, level){
     this.hitsLeft = 15;
     this.enemyType = 3;
     this.phase = 0;
+    this.type = type;
     
     this.animations.play('E03_idle');
     //this.loadBulletsEnemy();
     
-    this.phaseTimes = 2;
+    this.phaseTimes = 1;
 };
 
 shooter1942.enemy3Prefab.prototype = Object.create(Phaser.Sprite.prototype);
@@ -78,8 +79,20 @@ shooter1942.enemy3Prefab.prototype.update = function() {
             this.body.velocity.y = gameOptions.enemy3Speed;
             if(this.body.position.y <= gameOptions.gameHeight/6)
             {
+                if(this.type == 1 && this.phaseTimes < 1){
+                    this.shoot();
+                    this.phase++;
+                }
+                else{
                 this.shoot();
                 this.phase--;
+                }
+            }
+            break;
+        case 5:
+            if(this.type == 1){
+            this.body.velocity.x = 0;
+            this.body.velocity.y = gameOptions.enemy3Speed;
             }
             break;
          default:
