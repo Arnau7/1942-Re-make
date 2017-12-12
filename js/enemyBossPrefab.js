@@ -17,7 +17,7 @@ shooter1942.enemyBossPrefab = function(game, x, y,type){
     
     
     this.animations.play('Eboss_idle');
-    this.timer = this.game.time.events.loop(Phaser.Timer.SECOND * 2, this.shoot, this);
+    this.timer = this.game.time.events.loop(Phaser.Timer.SECOND * 0.75, this.shoot, this);
 };
 shooter1942.enemyBossPrefab.prototype = Object.create(Phaser.Sprite.prototype);
 shooter1942.enemyBossPrefab.prototype.constructor = shooter1942.enemyBossPrefab;

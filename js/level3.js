@@ -157,8 +157,10 @@ shooter1942.level3 = {
             this.quit();
         }
         if(gameOptions.lives < 0){
+            this.soundtrack.stop();
+            this.music_over.play();
             gameOptions.cameFromMenu = 3;
-            this.gameOver();
+        this.state.start('menu_highscore');
         }
         
         //EnemyShooting
