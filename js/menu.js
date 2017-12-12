@@ -57,6 +57,7 @@ shooter1942.menu = {
         
         gameOptions.lives = 2;
         gameOptions.rolls = 3;
+        gameOptions.cameFromMenu = 0;
     },
     
     update:function(){
@@ -101,10 +102,10 @@ shooter1942.menu = {
         }        
     },
     startGame:function(){
-        this.state.start('level2');
+        this.state.start('level3');
     },
     rankingMenu:function(){
-        gameOptions.cameFromMenu = true;
+        gameOptions.cameFromMenu = 0;
         this.state.start('menu_highscore');
     },
     creditsMenu:function(){

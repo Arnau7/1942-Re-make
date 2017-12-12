@@ -17,11 +17,13 @@ var gameOptions = {
     enemy1BulletSpeed:  180,
     enemy2Speed:        100,
     enemy3Speed:        -70,
+    bossSpeed:          70,
+    bossBulletsSpeed:   150,
     bullet_playerSpeed: -400,
-    bullet_enemySpeed:  200,
+    bullet_enemySpeed:  180,
     immunity:           false,  //Makes player immune to all damage
     threshold:          false,  //Allows chain of rolls before player immunity expires
-    cameFromMenu:       false,  //Checks if came from a menu or a level
+    cameFromMenu:       0,      //Checks if came from a menu(0) or a level(1),(2),(3)
     playerRespawning:   false,  //Checks if between death and respawn
     enemy3Killed:       0,      //Used to count enemy3 killed
     totalEnemiesSpawned:0,      //(ONLY USE IF REUSING ENEMIES) Used to count enemies spawned in a level 
@@ -43,6 +45,7 @@ WebFontConfig = {
 //SCENES INCLUDE
 shooter1942.game.state.add('level1',shooter1942.level1);
 shooter1942.game.state.add('level2',shooter1942.level2);
+shooter1942.game.state.add('level3',shooter1942.level3);
 shooter1942.game.state.add('menu',shooter1942.menu);
 shooter1942.game.state.add('menu_highscore',shooter1942.menu_highscore);
 shooter1942.game.state.add('menu_credits',shooter1942.menu_credits);

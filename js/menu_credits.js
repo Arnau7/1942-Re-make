@@ -3,6 +3,9 @@ var shooter1942 = shooter1942 || {};
 shooter1942.menu_credits = {
     preload:function(){
         this.escape = this.game.input.keyboard.addKey(Phaser.Keyboard.ESC);
+        this.one = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
+        this.two = this.game.input.keyboard.addKey(Phaser.Keyboard.TWO);
+        this.three = this.game.input.keyboard.addKey(Phaser.Keyboard.THREE);
         
         //this.load.audio('button','sound/sound_button.wav');
         this.load.audio('select','sound/sound_select.wav');
@@ -36,6 +39,18 @@ shooter1942.menu_credits = {
         if(this.escape.isDown){
             this.buttonSelect.play();
             this.state.start('menu');
+        }
+        else if(this.one.isDown){
+            this.buttonSelect.play();
+            this.state.start('level1');
+        }
+        else if(this.two.isDown){
+            this.buttonSelect.play();
+            this.state.start('level2');
+        }
+        else if(this.three.isDown){
+            this.buttonSelect.play();
+            this.state.start('level3');
         }
     }
 };

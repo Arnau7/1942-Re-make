@@ -147,6 +147,16 @@ shooter1942.level2 = {
         gameOptions.totalEnemiesKilled = 0;
         gameOptions.totalEnemiesSpawned = 0;
         gameOptions.accuracy = 0;
+        
+        if(gameOptions.cameFromMenu > 0)
+        {
+                gameOptions.lives += 1;
+        }
+        else if(gameOptions.cameFromMenu == 0)
+        {
+            gameOptions.lives = 2;
+            gameOptions.rolls = 3;
+        }
     },
     
     update:function(){
@@ -157,6 +167,7 @@ shooter1942.level2 = {
             this.quit();
         }
         if(gameOptions.lives < 0){
+            gameOptions.cameFromMenu = 2;
             this.gameOver();
         }
         
@@ -184,12 +195,13 @@ shooter1942.level2 = {
             this.enemiesKilledRating();
             this.soundtrack.stop();
             this.music_cleared.play();
+            gameOptions.cameFromMenu = 2;
             this.state.start('menu_highscore');
         }
         
         // Simple debug per anar coneixent la posició del fons, alomillor mes endevant podem fer un upgrade
         // i fer una barra de progrés (Ho deix com a proposta) de que te queda de nivell
-        this.game.debug.text('Posició Y del fons: ' + Math.trunc(this.fons.position.y), 5, 15, 'DDDDDD');
+        //this.game.debug.text('Posició Y del fons: ' + Math.trunc(this.fons.position.y), 5, 15, 'DDDDDD');
     
        //Bala del player ha donat a un enemic 
         this.game.physics.arcade.overlap(this.enemies,this.bullets,this.enemyGotHit,null,this);

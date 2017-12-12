@@ -31,17 +31,26 @@ shooter1942.menu_highscore = {
         this.scoreText.fontSize = 18;
         
         //DEATH/COMPLETION TEXT
-        if(gameOptions.lives < 0 && !gameOptions.cameFromMenu)
+        if(gameOptions.lives < 0 && gameOptions.cameFromMenu > 0)
         {
             this.finalText = this.game.add.text(gameOptions.gameWidth/2, gameOptions.gameHeight/6.25, 'GAME OVER');
             this.finalText.fill = 'red';
         }
-        else if(gameOptions.lives >= 0 && !gameOptions.cameFromMenu)
+        else if(gameOptions.lives >= 0 && gameOptions.cameFromMenu > 0)
         {
             this.returnText = this.game.add.text(gameOptions.gameWidth/2, gameOptions.gameHeight/1.1, 'Press SPACEBAR to continue\nPress ESC to return');
-            this.finalText = this.game.add.text(gameOptions.gameWidth/2, gameOptions.gameHeight/6.25, 'LEVEL COMPLETED');
+            if(gameOptions.cameFromMenu == 1){
+                this.finalText = this.game.add.text(gameOptions.gameWidth/2, gameOptions.gameHeight/6.25, 'LEVEL 1 COMPLETED');
+            }
+            else if(gameOptions.cameFromMenu == 2){
+                this.finalText = this.game.add.text(gameOptions.gameWidth/2, gameOptions.gameHeight/6.25, 'LEVEL 2 COMPLETED');
+            }
+            else if(gameOptions.cameFromMenu == 3){
+                this.finalText = this.game.add.text(gameOptions.gameWidth/2, gameOptions.gameHeight/6.25, 'LEVEL 3 COMPLETED');
+            }
             this.finalText.fill = 'lightblue';
-    
+            
+            if(gameOptions.cameFromMenu != 3){
             this.accuracyText = this.game.add.text(gameOptions.gameWidth/2, gameOptions.gameHeight/4.8, gameOptions.accuracy + "%");
             this.accuracyText.anchor.setTo(.5);
             this.accuracyText.font = 'Press Start 2P';
@@ -61,8 +70,9 @@ shooter1942.menu_highscore = {
                 this.accuracyText.fill = '#ffff66';     //YELLOW
             
             this.accuracyText.fontSize = 20;
+            }
         }
-        else if (gameOptions.cameFromMenu){
+        else if (gameOptions.cameFromMenu == 0){
             this.finalText = this.game.add.text(gameOptions.gameWidth/2, gameOptions.gameHeight/6.25, '');
         }
         this.finalText.anchor.setTo(0.5);
@@ -80,16 +90,32 @@ shooter1942.menu_highscore = {
     update:function(){
         if(this.escape.isDown){
             this.buttonSelect.play();
-            gameOptions.cameFromMenu = false;
+            gameOptions.cameFromMenu = 0;
             this.state.start('menu');
         }
-        if(!gameOptions.cameFromMenu){
+        if(gameOptions.cameFromMenu == 1){
             if(this.space.isDown && this.space.downDuration(1)){
                 this.level2();
+            }
+        }
+        else if(gameOptions.cameFromMenu == 2){
+            if(this.space.isDown && this.space.downDuration(1)){
+                this.level3();
+            }
+        }
+        else if(gameOptions.cameFromMenu == 3){
+            if(this.space.isDown && this.space.downDuration(1)){
+                this.credits();
             }
         }
     },
     level2:function(){
         this.state.start('level2');
+    },
+    level3:function(){
+        this.state.start('level3');
+    },
+    credits:function(){
+        this.state.start('menu_credits');
     }
 };

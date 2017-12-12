@@ -153,6 +153,7 @@ shooter1942.level1 = {
             this.quit();
         }
         if(gameOptions.lives < 0){
+            gameOptions.cameFromMenu = 2;
             this.gameOver();
         }
         
@@ -174,6 +175,7 @@ shooter1942.level1 = {
             this.enemiesKilledRating();
             this.soundtrack.stop();
             this.music_cleared.play();
+            gameOptions.cameFromMenu = 1;
             this.state.start('menu_highscore');
         }
         

@@ -7,6 +7,7 @@ shooter1942.explosionPrefab = function(game,x,y,size, type){
     this.anchor.setTo(.5);
     this.scale.setTo(1);
     this.animations.add('explode3', [12,13,14,15,16,17,18,19,20,21,22], 10, false);
+    
     //this.scale.setTo(1.5);
 
     //TYPE 1 = PLAYER EXPLOSION
