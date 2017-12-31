@@ -12,6 +12,7 @@ shooter1942.menu = {
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         this.enter = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+        this.escape = this.game.input.keyboard.addKey(Phaser.Keyboard.ESC);
         
         this.load.audio('button','sound/sound_button.wav');
         this.load.audio('select','sound/sound_select.wav');
@@ -19,6 +20,7 @@ shooter1942.menu = {
     },
     
     create:function(){
+        shooter1942.menu_highscore.resumeGame();
         //BACKGROUND
         this.game.stage.backgroundColor = "000000";
         this.title = this.game.add.image(this.game.world.centerX,100,'title');
@@ -62,6 +64,11 @@ shooter1942.menu = {
     
     update:function(){
         
+        //Delete all local saved data
+        if(this.escape.isDown && this.escape.downDuration(1)){
+            shooter1942.menu_highscore.resetGame();
+        }
+        
         if(this.cursors.down.isDown && this.cursors.down.downDuration(1) && id < maxId){
             id++;
             this.buttonSound.play();
@@ -102,7 +109,7 @@ shooter1942.menu = {
         }        
     },
     startGame:function(){
-        this.state.start('level3');
+        this.state.start('level1');
     },
     rankingMenu:function(){
         gameOptions.cameFromMenu = 0;

@@ -17,10 +17,11 @@ var gameOptions = {
     enemy1BulletSpeed:  180,
     enemy2Speed:        100,
     enemy3Speed:        -70,
-    bossSpeed:          70,
+    bossSpeed:          100,
     bossBulletsSpeed:   150,
     bullet_playerSpeed: -400,
     bullet_enemySpeed:  180,
+    totalDeaths:        0,      //Increases for every death
     immunity:           false,  //Makes player immune to all damage
     threshold:          false,  //Allows chain of rolls before player immunity expires
     cameFromMenu:       0,      //Checks if came from a menu(0) or a level(1),(2),(3)

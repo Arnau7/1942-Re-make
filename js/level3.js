@@ -45,7 +45,27 @@ shooter1942.level3 = {
     create:function(){
         
         gameOptions.level = 'Level 3 - Boss Battle';
+        //------------------------------------------------------
+        //Important bools to reset in a new level
+        gameOptions.playerRespawning = false;
+        gameOptions.immunity = false;
+        gameOptions.totalEnemiesKilled = 0;
+        gameOptions.totalEnemiesSpawned = 0;
+        gameOptions.accuracy = 0;
         
+        //If you come from a previous level, you will gain +1 live for the next lvl
+        if(gameOptions.cameFromMenu > 0)
+        {
+                gameOptions.lives += 1;
+        }
+        //If you come from the Menu you will 
+        else if(gameOptions.cameFromMenu == 0)
+        {
+            gameOptions.lives = 2;
+            gameOptions.rolls = 3;
+            gameOptions.score = 0;
+        }
+        //---------------------------------------------------
         this.buttonSelect = this.add.audio('select');
         // Crear un objecte fons, per poder canviar-li les variables i pintar-ho
         this.fons = this.game.add.tileSprite(0, 0, gameOptions.gameWidth, 3072, 'bg3');
@@ -92,11 +112,11 @@ shooter1942.level3 = {
         this.levelTextTimer = this.game.time.events.add(Phaser.Timer.SECOND * 3, this.levelTextFunction, this);
         this.levelText.setShadow(2,2,'black', true, true);
         //Rolls
-        this.rolls = this.game.add.image(gameOptions.gameWidth-60, gameOptions.gameHeight-33,'rollIcon');
+        this.rolls = this.game.add.image(gameOptions.gameWidth-35, gameOptions.gameHeight-23,'rollIcon');
         this.rolls.anchor.setTo(.5);
         this.rolls.scale.setTo(0.75);
         //Rolls Text
-        this.rollsText = this.game.add.text(gameOptions.gameWidth-30, gameOptions.gameHeight-30, gameOptions.rolls);
+        this.rollsText = this.game.add.text(gameOptions.gameWidth-15, gameOptions.gameHeight-20, gameOptions.rolls);
         this.rollsText.anchor.setTo(.5);
         this.rollsText.fill = 'white';
         this.rollsText.font='Press Start 2P';
@@ -104,11 +124,11 @@ shooter1942.level3 = {
         this.rollsText.fontSize = 18;
         //this.rollsText.strokeThikckness = 1;
         //Lives
-        this.lives = this.game.add.image(30, gameOptions.gameHeight-30,'lives');
+        this.lives = this.game.add.image(20, gameOptions.gameHeight-20,'lives');
         this.lives.anchor.setTo(.5);
         this.lives.scale.setTo(1.5);
         //Lives Text
-        this.livesText = this.game.add.text(60, gameOptions.gameHeight-30, gameOptions.lives);
+        this.livesText = this.game.add.text(45, gameOptions.gameHeight-20, gameOptions.lives);
         this.livesText.anchor.setTo(.5);
         this.livesText.fill = 'white';
         this.livesText.font='Press Start 2P';
@@ -117,32 +137,14 @@ shooter1942.level3 = {
         //this.livesText.strokeThikckness = 2;
         //Score
         //Score Text
-        this.scoreText = this.game.add.text(gameOptions.gameWidth/2, 25, gameOptions.score);
+        this.scoreText = this.game.add.text(gameOptions.gameWidth/2, 15, gameOptions.score);
         this.scoreText.anchor.setTo(.5);
         this.scoreText.fill = 'lightblue';
         this.scoreText.font='Press Start 2P';
         //this.scoreText.stroke= 'black';
         this.scoreText.fontSize = 18;
         this.scoreText.setShadow(2,2,'black',true,true);
-        //-------------------------------------------------------------------------
         
-        gameOptions.playerRespawning = false;
-        gameOptions.immunity = false;
-        gameOptions.totalEnemiesKilled = 0;
-        gameOptions.totalEnemiesSpawned = 0;
-        gameOptions.accuracy = 0;
-        
-        //If you come from a previous level, you will gain +1 live for the next lvl
-        if(gameOptions.cameFromMenu > 0)
-        {
-                gameOptions.lives += 1;
-        }
-        //If you come from the Menu you will 
-        else if(gameOptions.cameFromMenu == 0)
-        {
-            gameOptions.lives = 2;
-            gameOptions.rolls = 3;
-        }
         this.bossAlive = true;
     },
     
@@ -595,6 +597,7 @@ shooter1942.level3 = {
     },*/
     resetLevel:function(){
         //this.player.kill();
+        gameOptions.totalDeaths++;
         gameOptions.immunity = true;
         gameOptions.playerRespawning = true;
         gameOptions.threshold = false;
@@ -613,7 +616,7 @@ shooter1942.level3 = {
     gameOver:function(){
         if(!this.bossAlive){
         this.soundtrack.stop();
-        this.music_over.play();
+        this.music_cleared.play();
         gameOptions.cameFromMenu = 3;
         this.state.start('menu_highscore');
         }

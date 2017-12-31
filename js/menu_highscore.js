@@ -11,6 +11,11 @@ shooter1942.menu_highscore = {
     },
     
     create:function(){
+        //Assign Highscore
+        this.scoreList();
+        //Save locally highscore data
+        this.saveGame();
+        
          //this.buttonSound = this.add.audio('button');
         this.buttonSelect = this.add.audio('select');
         
@@ -29,6 +34,18 @@ shooter1942.menu_highscore = {
         this.scoreText.font = 'Press Start 2P';
         this.scoreText.fill = 'yellow';
         this.scoreText.fontSize = 18;
+        //Highscore
+        this.hScoreText = this.game.add.text(30, gameOptions.gameHeight/3, 'HIGHSCORE:                        '+gameOptions.highscore);
+        this.hScoreText.anchor.setTo(0);
+        this.hScoreText.font = 'Press Start 2P';
+        this.hScoreText.fill = 'white';
+        this.hScoreText.fontSize = 18;
+        //Total Deaths
+        this.deathsText = this.game.add.text(30, gameOptions.gameHeight/1.6, 'TOTAL DEATHS:                  '+gameOptions.totalDeaths);
+        this.deathsText.anchor.setTo(0);
+        this.deathsText.font = 'Press Start 2P';
+        this.deathsText.fill = '#f66363';
+        this.deathsText.fontSize = 18;
         
         //DEATH/COMPLETION TEXT
         if(gameOptions.lives < 0 && gameOptions.cameFromMenu > 0)
@@ -117,5 +134,56 @@ shooter1942.menu_highscore = {
     },
     credits:function(){
         this.state.start('menu_credits');
+    },
+    scoreList:function(){
+        if(gameOptions.score > gameOptions.highscore)
+        {
+            gameOptions.highscore = gameOptions.score;
+        }
+    },
+    saveGame:function(){
+        if(!this.supportsLocalStorage()){return false;}
+        localStorage["saved"] = true;
+        localStorage["hScore"] = gameOptions.highscore;
+        localStorage["tDeaths"] = gameOptions.totalDeaths;
+        
+        var storedHScore = parseInt(localStorage["hScore"]);
+        if(storedHScore === NaN){
+            localStorage["hScore"] = 0;
+            storedHScore = 0;
+        }
+        var storedTDeaths = parseInt(localStorage["tDeaths"]);
+        if(storedTDeaths === NaN){
+            localStorage["tDeaths"] = 0;
+            storedTDeaths = 0;
+        }
+    },
+    resumeGame:function(){
+        if(!this.supportsLocalStorage()){
+            gameOptions.score = 0;
+            gameOptions.highscore = 0;
+            gameOptions.totalDeaths = 0;
+            return false;
+        }
+        if(!(localStorage["saved"]=="true")){
+            gameOptions.score = 0;
+            gameOptions.highscore = 0;
+            gameOptions.totalDeaths = 0;
+            return false;
+        }
+        gameOptions.highscore = parseInt(localStorage["hScore"]);        
+        gameOptions.totalDeaths = parseInt(localStorage["tDeaths"]);        
+        return true;
+    },
+    supportsLocalStorage:function(){
+        return('localStorage' in window) && window['localStorage']!==null;
+    },
+    resetGame:function(){
+        gameOptions.score = 0;
+        gameOptions.highscore = 0;
+        gameOptions.totalDeaths = 0;
+        localStorage["hScore"] = 0;
+        localStorage["tDeaths"] = 0;
+        this.saveGame();
     }
 };

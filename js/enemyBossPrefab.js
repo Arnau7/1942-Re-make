@@ -17,7 +17,7 @@ shooter1942.enemyBossPrefab = function(game, x, y,type){
     
     
     this.animations.play('Eboss_idle');
-    this.timer = this.game.time.events.loop(Phaser.Timer.SECOND * 0.75, this.shoot, this);
+    this.timer = this.game.time.events.loop(Phaser.Timer.SECOND * 0.5, this.shoot, this);
 };
 shooter1942.enemyBossPrefab.prototype = Object.create(Phaser.Sprite.prototype);
 shooter1942.enemyBossPrefab.prototype.constructor = shooter1942.enemyBossPrefab;
@@ -30,23 +30,49 @@ shooter1942.enemyBossPrefab.prototype.update = function() {
     }
     
     switch(this.phase){
-        //Pujar
+        //Entrada pujant
         case 0:
             this.body.velocity.x = 0;
+            this.body.velocity.y = -gameOptions.bossSpeed*0.5;
+            if(this.body.position.y <= gameOptions.gameHeight*0.8)
+            {
+                this.phase++;
+            }
+            break;
+        //Pujar
+        case 1:
+            this.body.velocity.x = 0;
             this.body.velocity.y = -gameOptions.bossSpeed;
+            if(this.body.position.y <= gameOptions.gameHeight/6)
+            {
+                this.phase++;
+            }
+            break;
+        //Pujar frenar
+        case 2:
+            this.body.velocity.x = 0;
+            this.body.velocity.y = -gameOptions.bossSpeed*0.5;
             if(this.body.position.y <= gameOptions.gameHeight/8)
             {
                 this.phase++;
             }
             break;
         //Baixar
-        case 1:
+        case 3:
             this.body.velocity.y = gameOptions.bossSpeed;
-            if(this.body.position.y >= gameOptions.gameHeight*0.6)
+            if(this.body.position.y >= gameOptions.gameHeight*0.55)
             {
-                this.phase--;
+                this.phase++;
             }
             break;
+        //Baixar frenar
+        case 4:
+            this.body.velocity.y = gameOptions.bossSpeed*0.5;
+            if(this.body.position.y >= gameOptions.gameHeight*0.6)
+            {
+                this.phase = 1;
+            }
+            break;    
         default:
             break;
     }
